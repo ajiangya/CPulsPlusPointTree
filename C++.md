@@ -22,8 +22,37 @@
 | TB   | 万亿字节, 太字节, 1TB = 1024GB = 2^10GB     |
 |      | 1 TB = 2^10 GB = 2^20 MB = 2^30 KB = 2^40 B |
 
+## 1.1 预处理
+
+|          | 预处理指令说明                            |
+| -------- | ----------------------------------------- |
+| #include | 包含头文件                                |
+| #define  | 定义宏                                    |
+| #undef   | 取消宏                                    |
+| #ifdef   | 条件编译, ,#ifndef,#if,#elif,#else,#endif |
+| #line    | 用于改变编译器报告的行号和文件名(不常用)  |
+| #error   | 用于在预处理阶段生成一个错误消息          |
+
+|      | 预处理运算符说明                                             |
+| ---- | ------------------------------------------------------------ |
+| #    | **字符串化运算符**,将宏参数转换为用双引号括起来的字符串字面量 |
+| ##   | **连接运算符**，连接两个标记以形成一个标记                   |
+| ...  | 可变参数宏, 用的不多.                                        |
+
+|                |                                          |
+| -------------- | ---------------------------------------- |
+| **`__cplusplus`** | c++始终定义的宏, 表示编译的是c++代码     |
+| **`__DATE__`** | 程序被编译的日期, 格式为 "Mmm dd yyyy" |
+| **`__TIME__`** | 程序被编译的时间,格式为 "hh:mm:ss"     |
+| **`__FILE__`** | 当前源代码文件的名称,字符串                 |
+| **`__LINE__`** | 源代码文件中的当前行号,整型                |
+| **`__func__`** | 预定义的标识符, (C++11 引入), 当前函数的名称 |
+| **`__VA_ARGS__`** | 不是预定义, 在定义可变参数宏 时使用的一个特殊的标记符，用于表示可变参数列表 |
+
+
 
 # 2 语法
+
 ## 2.1 变量
 
 ### 2.1.1 声明与定义
@@ -58,13 +87,11 @@
 |         | uint8_t | uint16_t | uint32_t | uint64_t | **uintptr_t** |
 
 
-| 修饰符        | 解释说明                                         |
-| ------------- | ------------------------------------------------ |
-| signed        | 有符号                                           |
-| unsigned      | 无符号                                           |
-| signed char   | 有符号字符，与char不完全对等, 与编译器的实现有关 |
-| unsigned char | 无符号字符                                       |
-| void          | 空类型                                           |
+| 修饰符   | 解释说明 |
+| -------- | -------- |
+| signed   | 有符号   |
+| unsigned | 无符号   |
+| void     | 空类型   |
 
 | 类型转换             | 解释说明                       |
 | -------------------- | ------------------------------ |
@@ -127,6 +154,8 @@ int matrix[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}; // 二维整�
 ```
 
 #### 2.1.2.2 指针
+
+NULL指针：空指针，值为0.
 
 普通指针：
 
@@ -383,8 +412,6 @@ const int * const ptr = &x;
 
 #### 2.1.4.4 define,typedef,函数,inline,const
 
-
-
 |         | 说明                                                         |
 | ------- | ------------------------------------------------------------ |
 | #define | 预处理指令,只替换,不求解,无作用域,无优先级,无安全检查,内存开销大, 不便于调试, |
@@ -454,12 +481,17 @@ void* pVoid = &i;
 int& ref = *reinterpret_cast<int*>(pVoid); // void*到int&的转换
 ```
 
-## 2.2 存储类型说明符
+## 2.2 类型限定符
 
-|        | 说明                                                         |
-| ------ | ------------------------------------------------------------ |
-| static | 静态局部变量, 静态全局变量, 静态全局函数,静态成员变量,静态成员函数 |
-| extern | 用于全局函数/全局变量的声明                                  |
+|              | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| static       | 静态局部变量, 静态全局变量, 静态全局函数,静态成员变量,静态成员函数 |
+| extern       | 用于全局函数/全局变量的声明                                  |
+| const        | 该变量的值不能被修改                                         |
+| register     | **已废弃**, 寄存器变量，被频繁使用，可存储在CPU的寄存器中，以提高程序的运行效率， |
+| volatile     | 该变量的值可能会被程序以外的因素改变，如硬件或其他线程       |
+| mutable      | 表示类中的成员变量可以在 const 成员函数中被修改              |
+| thread_local | c++11开始, 仅在其创建的线程上可访问. 跟随线程的声明周期创建和销毁. |
 
 |                | 说明                                                       |
 | -------------- | ---------------------------------------------------------- |
@@ -740,18 +772,12 @@ void displayMessage(string message, int repeatTimes) {
 
 ### 2.8.3 返回值
 
-返回局部变量的值
+返回值说明：
 
-- 当函数返回局部变量的值时，会发生**值的拷贝**。局部变量在函数退出时被销毁，但它们的值已经被拷贝给调用者，所以这是安全的。
-- 不要返回局部变量的**引用或指针**，因为局部变量在函数返回后不再存在，这将导致悬挂引用或野指针。
+- 当函数**返回局部变量的值**时，会发生**值的拷贝**。局部变量在函数退出时被销毁，但它们的值已经被拷贝给调用者，所以这是安全的。
+- **不要返回局部变量的引用或指针**，因为局部变量在函数返回后不再存在，这将导致悬挂引用或野指针。
 
-
-
-返回局部静态变量或全局变量的引用
-
-- 可以返回局部静态变量或全局变量的引用，因为这些变量在函数返回后仍然存在。
-
-
+- 可以返回**局部静态变量或全局变量的引用**，因为这些变量在函数返回后仍然存在。
 
 返回动态分配内存的指针
 
@@ -870,8 +896,8 @@ int main() {
 - 递归函数
 - 含有静态局部变量的函数
 - 含有循环/复杂控制流的函数
-- 虚函数
-- 构造和析构函数
+- 虚函数：**动态绑定与静态绑定的冲突**
+- 构造和析构函数： 对象构造和销毁的复杂性，编译器限制。
 
 使用注意事项:
 
@@ -930,8 +956,6 @@ int main() {
 继承 : 一个类（子类）继承另一个类（父类）的属性和方法，也称基类和派生类。
 
 多态 : 通过基类指针或引用，来调用派生类的方法。
-
-
 
 ## 3.2 class类
 
@@ -1274,7 +1298,7 @@ int main() {
 |      | 说明                                                         |
 | ---- | ------------------------------------------------------------ |
 | 重载 | **Overload**,同一作用域, 名字相同参数列表不同的函数.         |
-| 覆盖 | **Override**, 重写, 派生类中与基类具有名字+参数列表+返回类型均相同的**虚函数**, 实现替换.实现多态,允许派生类通过基类指针/引用调用派生类的实现. |
+| 覆盖 | **Override**, 重写, 派生类中与基类具有名字+参数列表+返回类型均相同的**虚函数**, 实现替换. |
 | 隐藏 | **Hide**派生类的函数与**基类的非虚函数**具有相同名字, 基类的函数会被隐藏. |
 
 |      | 作用域       | 名字+参数列表+返回类型               | 虚函数?  |
@@ -1420,25 +1444,22 @@ class Bottom : virtual public Left,virtual public Right {
 
 1. **虚函数表（vtable）**：
    
-   当一个类中有虚函数时, **编译时**编译器会为该类生成一个虚函数表. 
+   虚函数表是一个存储虚函数地址的数组.
    
-   该表是一个存储虚函数地址的数组.
+   当一个类中有虚函数时,编译器 **编译时**会为该类**创建**一个虚函数表, 并**初始化**. 
    
-   **每一个类都有一个虚表**, 该类所有对象共享. 
-   
-   如果派生类重写了基类的虚函数，则虚表中对应的条目将指向派生类的函数实现
+   如果派生类重写了基类的虚函数，则虚表中对应的条目将指向派生类的函数实现.
    
 2. **虚指针（vptr）**：
-   同时，编译器还会在类的对象中添加一个指向虚函数表的指针，称为虚指针（vptr）。
 
-   为对象的第一个数据成员.
-   
-   虚指针指向虚表的首地址.
-   
-   在**构造函数的列表初始化**时, 对虚指针进行初始化赋值.
-   
-   每个对象都有自己的虚指针.
-   
+   指向虚函数表的指针，称为虚指针(vptr).
+
+   **编译时**编译器会在类的内存布局中**预留一个指针**大小的空间来存放vptr， 这个空间是每个对象实例的一部分.
+
+   对象实例化**构造函数的列表初始化**时，对虚指针进行初始化为指向该类的vtable的地址。
+
+   每个对象都有自己的虚指针，为对象的第一个数据成员.
+
 3. **动态绑定**：
    当通过基类指针或引用调用虚函数时，程序会在运行时查看该指针或引用所指向对象的虚指针，进而查找虚函数表，以确定应该调用哪个函数。这就是动态绑定的过程。
 
@@ -1477,5 +1498,872 @@ ref.func();  // 将调用 Derived 类的 func 实现
 1. 派生类重写虚函数时, 加上virtual 和 override, 便于编译器检查.
 2. 避免隐藏虚函数: 若派生类的函数与基类的虚函数同名不同参数列表, 将会导致该问题, 要保持一致正确重写.
 3. 析构函数声明为虚函数: 通过基类指针删除派生类对象时, 调用基类的析构, 防止出现资源泄漏.
-4. 构造函数不能为虚函数:  构造函数调用时,对象类型已确定, 无需动态绑定. 构造函数创建对象时, 虚表还没有初始化, 也无法调用. 
+4. 构造函数不能为虚函数:  构造函数调用时,对象类型已确定, 无需动态绑定. 构造函数创建对象时, 对象还没有实例化完成, 内存空间还没有, **无法找到虚表**. 
+5. 虚函数不能删除/修改/中间插入, 否则会导致虚表错乱, 函数调用出错.
+
+### 3.3.6 纯虚函数和抽象类
+
+**纯虚函数**: 声明函数时最后加 = 0, 表示为纯虚函数, 只有声明没有定义实现.
+
+**抽象类**: 有纯虚函数的类称为抽象类, 抽象类不能实例化, 一般作为基类. 
+
+​		 派生类继承时必须实现纯虚函数, 否则也不能实例化.
+
+示例:
+
+```
+#include <iostream>  
+  
+// 抽象基类 Shape  
+class Shape {  
+public:  
+    // 纯虚函数  
+    virtual void draw() const = 0; // 注意 "= 0" 表示这是一个纯虚函数  
+    virtual ~Shape() = default;    // 虚析构函数，虽然不是必需的，但通常是一个好习惯  
+};  
+  
+// 派生类 Circle  
+class Circle : public Shape {  
+public:  
+    void draw() const override {  
+        std::cout << "Drawing a circle..." << std::endl;  
+    }  
+};  
+  
+// 派生类 Rectangle  
+class Rectangle : public Shape {  
+public:  
+    void draw() const override {  
+        std::cout << "Drawing a rectangle..." << std::endl;  
+    }  
+};  
+  
+int main() {  
+    // Shape s; // 错误！不能实例化抽象类  
+  
+    Circle c;  
+    c.draw(); // 输出: Drawing a circle...  
+  
+    Rectangle r;  
+    r.draw(); // 输出: Drawing a rectangle...  
+  
+    return 0;  
+}
+```
+
+
+
+## 3.4 多态
+
+c++ 多态分为编译时多态和运行时多态。
+
+|            | 说明                                                     |
+| ---------- | -------------------------------------------------------- |
+| 编译时多态 | 静态多态, 静态绑定, 编译时确定. 有函数**重载**，**模板** |
+| 运行时多态 | 动态多态, 动态绑定, 运行时确定.  虚函数                  |
+
+```
+#include <iostream>  
+#include <string>  
+  
+// 编译时多态：函数重载  
+void print(int x) {  
+    std::cout << "Printing int: " << x << std::endl;  
+}  
+  
+void print(const std::string& str) {  
+    std::cout << "Printing string: " << str << std::endl;  
+}  
+  
+// 运行时多态：虚函数  
+class Base {  
+public:  
+    virtual void sayHello() const {  
+        std::cout << "Hello from Base!" << std::endl;  
+    }  
+    virtual ~Base() = default;  
+};  
+  
+class Derived : public Base {  
+public:  
+    void sayHello() const override {  
+        std::cout << "Hello from Derived!" << std::endl;  
+    }  
+};  
+  
+int main() {  
+    // 编译时多态示例  
+    print(42);          // 调用 print(int)  
+    print("Hello");     // 调用 print(const std::string&)  
+  
+    // 运行时多态示例  
+    Base* basePtr = new Derived();  
+    basePtr->sayHello();  // 动态绑定到 Derived::sayHello()  
+    delete basePtr;  
+  
+    return 0;  
+}
+```
+
+
+
+# 4 代码复用
+
+
+
+## 4.1 重载
+
+重载: 同一个作用域, 函数名相同, 参数列表不同的函数, 返回类型无关.
+
+### 4.1.1 函数重载
+
+函数重载: 同一个作用域, 函数名相同, 参数列表不同得函数.  
+
+参数列表: 包括类型, 个数, 顺序.
+
+代码示例:
+
+```
+#include <iostream>  
+#include <string>  
+  
+// 函数重载示例：print函数  
+  
+// 第一个版本，用于打印整数  
+void print(int value) {  
+    std::cout << "Printing int: " << value << std::endl;  
+}  
+  
+// 第二个版本，用于打印浮点数  
+void print(float value) {  
+    std::cout << "Printing float: " << value << std::endl;  
+}  
+  
+// 第三个版本，用于打印双精度浮点数  
+void print(double value) {  
+    std::cout << "Printing double: " << value << std::endl;  
+}  
+  
+// 第四个版本，用于打印字符串  
+void print(const std::string& value) {  
+    std::cout << "Printing string: " << value << std::endl;  
+}  
+  
+// 第五个版本，用于打印字符  
+void print(char value) {  
+    std::cout << "Printing char: " << value << std::endl;  
+}  
+  
+int main() {  
+    // 调用不同版本的print函数  
+    print(42);           // 调用第一个版本，打印整数  
+    print(3.14f);        // 调用第二个版本，打印浮点数  
+    print(2.71828);      // 调用第三个版本，打印双精度浮点数（注意这里没有'f'后缀，所以是double类型）  
+    print("Hello, World!"); // 调用第四个版本，打印字符串  
+    print('A');          // 调用第五个版本，打印字符  
+  
+    return 0;  
+}
+```
+
+输出:
+
+```
+Printing int: 42  
+Printing float: 3.14  
+Printing double: 2.71828  
+Printing string: Hello, World!  
+Printing char: A
+```
+
+### 4.1.2 运算符重载
+
+操作符重载格式:
+
+```
+返回值 operator操作符(参数)
+```
+
+示例:
+
+```
+#include <iostream>  
+  
+// 自定义复数类  
+class Complex {  
+public:  
+    double real;  
+    double imag;  
+  
+    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}  
+  
+    // 重载+操作符  
+    Complex operator+(const Complex& other) const {  
+        return Complex(real + other.real, imag + other.imag);  
+    }  
+  
+    // 输出复数  
+    void print() const {  
+        std::cout << "(" << real << ", " << imag << ")" << std::endl;  
+    }  
+};  
+  
+int main() {  
+    Complex c1(1.0, 2.0);  
+    Complex c2(3.0, 4.0);  
+    Complex sum = c1 + c2; // 使用重载的+操作符  
+    sum.print(); // 输出结果  
+    return 0;  
+}
+```
+
+**不可重载操作符**：
+
+|               | 不可重载操作符说明 |
+| ------------- | ------------------ |
+| **.**         | 成员访问运算符     |
+| **.**, **->** | 成员指针访问运算符 |
+| **::**        | 域运算符           |
+| **sizeof**    | 长度运算符         |
+| **?:**        | 条件运算符         |
+| **#**         | 预处理符号         |
+| case          | 4个强制类型转换符  |
+
+下面是可重载的运算符列表：
+
+| 双目算术运算符 | + (加)，-(减)，*(乘)，/(除)，% (取模)                        |
+| -------------- | ------------------------------------------------------------ |
+| 关系运算符     | ==(等于)，!= (不等于)，< (小于)，> (大于)，<=(小于等于)，>=(大于等于) |
+| 逻辑运算符     | \|\|(逻辑或)，&&(逻辑与)，!(逻辑非)                          |
+| 单目运算符     | + (正)，-(负)，*(指针)，&(取地址)                            |
+| 自增自减运算符 | ++(自增)，--(自减)                                           |
+| 位运算符       | \| (按位或)，& (按位与)，~(按位取反)，^(按位异或),，<< (左移)，>>(右移) |
+| 赋值运算符     | =, +=, -=, *=, /= , % = , &=, \|=, ^=, <<=, >>=              |
+| 空间申请与释放 | new, delete, new[ ] , delete[]                               |
+| 其他运算符     | **()**(函数调用)，**->**(成员访问)，**,**(逗号)，**[]**(下标) |
+
+### 4.1.3 重载限制
+
+C++中的操作符重载有一些限制，这些限制旨在保持语言的一致性和防止滥用。以下是一些主要的限制：
+
+1. **至少有一个操作数是用户定义的类型**：
+   重载的操作符必须至少有一个操作数是用户自定义类型（类类型、结构体类型或枚举类型）。这是为了防止用户为标准类型重载操作符，从而改变它们原有的语义。
+
+2. **不能违反操作符原有的语法规则**：
+   重载的操作符必须保持其原有的操作数个数、语法结构和基本语义。例如，不能将二元操作符重载为单元操作符，也不能改变操作符的优先级或结合性。
+
+3. **不能创建新的操作符**：
+   不能定义新的操作符符号。只能重载C++语言中已有的操作符。例如，不能定义一个新的`operator@`。
+
+4. **部分操作符不能被重载**：
+   有一些操作符在C++中是不能被重载的，包括：
+
+   - `sizeof`：获取对象或类型的大小。
+   - `.*`：成员指针访问。
+   - `::`：域解析操作符。
+   - `?:`：条件操作符（三元操作符）。
+   - 四个类型转换操作符：`const_cast`、`dynamic_cast`、`reinterpret_cast` 和 `static_cast`。
+
+5. **部分操作符只能通过成员函数重载**：
+   一些操作符只能通过类的成员函数来重载。这些操作符通常与类的特定对象紧密相关，包括：
+
+   - 赋值操作符 `=`
+   - 下标操作符 `[]`
+   - 函数调用操作符 `()`
+   - 成员访问箭头操作符 `->`
+
+   这些操作符通常需要访问类的私有或受保护成员，因此它们被限制为只能通过成员函数进行重载。
+
+6. **不能改变操作符的优先级和结合性**：
+   重载的操作符继承其在语言中的原有优先级和结合性。这意味着，例如，重载的`+`操作符仍然保持其左结合性，并且优先级与原始的加法操作符相同。
+
+7. **重载操作符的参数不能全为默认参数**：
+   这会导致编译器在解析表达式时产生歧义，因为它无法确定应该使用哪个重载版本。
+
+8. **返回值类型的限制**：
+   虽然大多数操作符的返回值类型可以由用户自定义，但有一些约定和限制。例如，赋值操作符通常返回左操作数的引用，以便支持链式赋值。
+
+9. **二义性的避免**：
+   当存在多个可能的操作符重载版本时，编译器必须能够唯一确定应该使用哪个版本。如果编译器无法确定，则会产生编译错误。
+
+在重载操作符时，应仔细考虑这些限制，以确保代码的清晰性、可读性和正确性。
+
+## 4.2 友元
+
+在C++中，`friend`关键字用于声明友元函数或友元类。当一个函数或一个类被声明为另一个类的友元时，它可以访问该类的私有（private）和保护（protected）成员。这是一种突破数据封装和隐藏的方式，应谨慎使用。
+
+友元可以用于以下情况：
+
+1. 当两个类需要紧密协作，并且要求其中一个类能够访问另一个类的私有或受保护成员时。
+2. 重载操作符时，特别是当操作符需要访问类的私有或受保护成员时。
+
+### 4.2.1 友元函数
+
+友元函数分为两种：
+
+- 友元函数， friend void ClassB::func(ClassA& a);
+- 友元成员函数，
+
+友元函数的主要用途：
+
+1. **重载操作符**：当需要为类类型的对象重载操作符时，友元函数特别有用。例如，重载`<<`操作符以便与`std::ostream`一起使用，或者重载比较操作符如`==`和`<`等。这些操作符通常需要访问类的私有或受保护成员，而友元函数能够直接访问这些成员。
+2. **提供对类私有成员的访问**：有时，出于某种原因（如调试、测试或特殊的实用程序函数），你可能想要提供一个能够直接访问类私有成员的函数。虽然这通常被认为是一种破坏封装性的做法，但在某些情况下可能是必要的。
+3. **实现回调机制**：在某些设计模式中，可能需要将一个类的私有数据传递给另一个类的方法进行处理。通过将另一个类的方法声明为友元，可以直接访问私有数据而无需通过类的公共接口。
+4. **增强两个类之间的协作**：当两个类需要紧密协作时，有时将一个类的方法声明为另一个类的友元可以更高效地共享信息。这样做可以减少不必要的公共接口方法，并且可以直接在两个类之间传递数据。
+5. **保持接口的一致性**：在某些情况下，将某些函数作为友元而不是类的成员函数，可以帮助保持类的接口更加一致和简洁。这样做可以避免在类的公共接口中暴露过多的实现细节。
+
+**友元成员函数**：
+
+```
+class ClassB; // 前向声明  
+  
+class ClassA {  
+    friend void ClassB::accessPrivateMember(ClassA& a); // 声明ClassB的成员函数为友元  
+private:  
+    int secret = 42;  
+};  
+  
+class ClassB {  
+public:  
+    void accessPrivateMember(ClassA& a); // 此函数将能够访问ClassA的私有成员  
+};  
+  
+void ClassB::accessPrivateMember(ClassA& a) {  
+    std::cout << "ClassA's secret is: " << a.secret << std::endl; // 直接访问ClassA的私有成员  
+}  
+  
+int main() {  
+    ClassA a;  
+    ClassB b;  
+    b.accessPrivateMember(a); // 输出：ClassA's secret is: 42  
+    return 0;  
+}
+```
+
+**友元函数**：
+
+```
+#include <iostream>  
+  
+class Box {  
+    // 声明一个友元函数  
+    friend void printWi00dth(Box box);  
+  
+public:  
+    Box() : width(0.0), height(0.0) {}  
+  
+    // 成员函数，设置宽度和高度  
+    void setDimensions(double w, double h) {  
+        width = w;  
+        height = h;  
+    }  
+  
+private:  
+    double width;  
+    double height;  
+};  
+  
+// 定义一个友元函数  
+void printWidth(Box box) {  
+    // 友元函数可以直接访问Box类的私有成员  
+    std::cout << "Width of box: " << box.width << std::endl;  
+}  
+  
+int main() {  
+    Box box;  
+  
+    // 使用成员函数设置宽度和高度  
+    box.setDimensions(5.0, 10.0);  
+  
+    // 使用友元函数打印宽度  
+    printWidth(box);  
+  
+    return 0;  
+}
+```
+
+### 4.2.2 友元类
+
+**含义**
+
+当一个类B被声明为类A的友元类时，类B的成员函数可以访问类A的所有成员，包括私有和保护成员。这是一种突破数据封装的方式，应当谨慎使用，因为它可能破坏对象的封装性和隐藏数据的原则。
+
+**用途**
+
+1. **操作符重载**：当需要重载涉及两个不同类对象的操作符时，常常将一个类声明为另一个类的友元，以便能够访问对方的私有和保护成员。
+2. **紧密协作**：在某些情况下，两个类需要非常紧密地协作，以至于一个类需要直接访问另一个类的内部状态。
+3. **避免过多的getter/setter方法**：通过友元类，可以直接访问私有成员，而不需要为每个需要访问的成员编写getter和setter方法。
+
+**示例**
+
+```
+#include <iostream>  
+  
+class Box {  
+    // 声明FriendClass为友元类  
+    friend class FriendClass;  
+  
+public:  
+    Box() : width(0.0), height(0.0) {}  
+  
+    // 普通的公有成员函数  
+    void setDimensions(double w, double h) {  
+        width = w;  
+        height = h;  
+    }  
+  
+private:  
+    double width;  
+    double height;  
+};  
+  
+class FriendClass {  
+public:  
+    void printWidth(Box& box) {  
+        // 作为友元类，可以直接访问Box的私有成员width  
+        std::cout << "Width of box: " << box.width << std::endl;  
+    }  
+};  
+  
+int main() {  
+    Box box;  
+    FriendClass friendObj;  
+  
+    // 设置Box的尺寸  
+    box.setDimensions(5.0, 10.0);  
+  
+    // 使用友元类来打印Box的宽度  
+    friendObj.printWidth(box);  
+  
+    return 0;  
+}
+```
+
+### 4.2.3 互为友元类
+
+当两个类相互声明对方为友元类时，它们被称为“互为友元”。
+
+```
+#include <iostream>  
+  
+class ClassB; // 前向声明  
+  
+class ClassA {  
+    // 声明ClassB为友元类  
+    friend class ClassB;  
+  
+private:  
+    int privateDataA = 100;  
+  
+public:  
+    void showBPrivate(ClassB& b);  
+};  
+  
+class ClassB {  
+    // 声明ClassA为友元类  
+    friend class ClassA;  
+  
+private:  
+    int privateDataB = 200;  
+  
+public:  
+    void showAPrivate(ClassA& a);  
+};  
+  
+// ClassA的成员函数实现  
+void ClassA::showBPrivate(ClassB& b) {  
+    std::cout << "ClassA can access ClassB's private data: " << b.privateDataB << std::endl;  
+}  
+  
+// ClassB的成员函数实现  
+void ClassB::showAPrivate(ClassA& a) {  
+    std::cout << "ClassB can access ClassA's private data: " << a.privateDataA << std::endl;  
+}  
+  
+int main() {  
+    ClassA a;  
+    ClassB b;  
+  
+    // 互相展示私有数据  
+    a.showBPrivate(b); // ClassA can access ClassB's private data: 200  
+    b.showAPrivate(a); // ClassB can access ClassA's private data: 100  
+  
+    return 0;  
+}
+```
+
+
+
+## 4.3 模板
+
+模板编程是一种编程范式，允许编写类型无关的代码。
+
+**模板编程的用途**：
+
+1. **类型无关的代码**：模板允许编写不依赖于特定数据类型的代码。这意味着你可以用相同的逻辑来处理不同类型的数据，提高了代码的重用性。
+2. **减少代码冗余**：在没有模板的情况下，对于每一种数据类型，你可能需要编写几乎相同的代码。模板减少了这种冗余，使代码更加简洁。
+3. **增加代码灵活性**：模板提供了一种方式来编写更加通用的代码，这些代码可以适应多种不同的数据类型和场景。
+4. **编译时多态性**：与运行时的多态性（如虚函数）不同，模板提供了编译时的多态性。编译器在编译时根据提供的类型参数生成相应的代码，这有助于在编译期间捕获类型错误，并且通常没有运行时开销。
+5. **优化性能**：由于模板实例化是在编译时完成的，编译器有机会进行针对特定类型的优化，这可能会产生比非模板代码更高的运行效率。
+6. **扩展性**：模板可以与C++的其他特性（如操作符重载、异常处理等）结合使用，以创建强大且易于扩展的库和框架。
+
+### 4.3.1 函数模板
+
+**定义**
+
+函数模板是以关键字`template`开始，后跟一个尖括号`<>`中的类型参数列表，然后是函数声明和定义的常规格式。类型参数在函数体内作为占位符使用，当函数模板被实例化时，这些占位符会被具体的类型替换。
+
+```
+定义函数模板
+template <typename type> ret-type func-name(parameter list)
+{
+   // 函数的主体
+}
+```
+
+```
+#include <iostream>  
+  
+// 函数模板声明  
+template <typename T>  
+void swap(T& a, T& b) {  
+    T temp = a;  
+    a = b;  
+    b = temp;  
+}  
+  
+int main() {  
+    int x = 5, y = 10;  
+    std::cout << "Before swap: x = " << x << ", y = " << y << std::endl;  
+  
+    // 实例化函数模板，用于int类型  
+    swap(x, y);  
+    std::cout << "After swap: x = " << x << ", y = " << y << std::endl;  
+  
+    double p = 3.14, q = 2.71;  
+    std::cout << "Before swap: p = " << p << ", q = " << q << std::endl;  
+  
+    // 实例化函数模板，用于double类型  
+    swap(p, q);  
+    std::cout << "After swap: p = " << p << ", q = " << q << std::endl;  
+  
+    return 0;  
+}
+```
+
+### 4.3.2 类模板
+
+模板类（也称为类模板）是一种特殊的类，它可以被参数化以工作在多种不同的数据类型上。
+
+定义模型
+
+```
+template <typename type>
+class class-name {
+.
+.
+.
+}
+```
+
+代码示例：
+
+```
+#include <iostream>  
+  
+// 声明模板类  
+template <typename T>  
+class Array {  
+private:  
+    T* data;  
+    int size;  
+  
+public:  
+    // 构造函数  
+    Array(int size) {  
+        this->size = size;  
+        data = new T[size];  
+    }  
+  
+    // 析构函数  
+    ~Array() {  
+        delete[] data;  
+    }  
+  
+    // 设置元素  
+    void set(int index, T value) {  
+        if (index >= 0 && index < size) {  
+            data[index] = value;  
+        }  
+    }  
+  
+    // 获取元素  
+    T get(int index) {  
+        if (index >= 0 && index < size) {  
+            return data[index];  
+        }  
+        // 抛出异常或返回一个默认值可能是更好的做法  
+        return T();  
+    }  
+  
+    // 获取数组大小  
+    int getSize() const {  
+        return size;  
+    }  
+};  
+  
+int main() {  
+    // 实例化模板类用于int类型  
+    Array<int> intArray(5);  
+    intArray.set(0, 10);  
+    std::cout << "intArray[0] = " << intArray.get(0) << std::endl;  
+  
+    // 实例化模板类用于double类型  
+    Array<double> doubleArray(3);  
+    doubleArray.set(0, 3.14);  
+    std::cout << "doubleArray[0] = " << doubleArray.get(0) << std::endl;  
+  
+    return 0;  
+}
+```
+
+# 5 异常处理
+
+
+
+## 5.1 try catch throw
+
+异常处理是一种处理程序中运行时错误或异常情况的机制
+
+1. **try块**：将要检查的代码放在`try`块中。如果在执行`try`块中的代码时发生异常，控制将立即传递给与该异常类型匹配的`catch`块。
+2. **catch块**：在`catch`块中处理异常。你可以有多个`catch`块来处理不同类型的异常。每个`catch`块都指定它可以处理的异常类型。
+3. **throw语句**：使用`throw`语句抛出异常。你可以抛出任何类型的对象作为异常，但标准做法是抛出派生自`std::exception`的对象。
+4. **异常类型**：标准库定义了一组异常类，你可以使用这些异常类，也可以定义自己的异常类。
+5. **异常传播**：如果`try`块中的代码抛出异常，并且没有相应的`catch`块来捕获该异常，那么异常将继续向上传播，直到被捕获或导致程序终止。
+6. **资源清理**：使用C++的RAII（Resource Acquisition Is Initialization）惯用法来确保在异常发生时资源得到正确清理。
+
+```
+#include <iostream>  
+#include <stdexcept> // for std::runtime_error  
+  
+// 自定义异常类  
+class MyException : public std::runtime_error {  
+public:  
+    explicit MyException(const std::string& what_arg) : std::runtime_error(what_arg) {}  
+};  
+  
+int main() {  
+    try {  
+        // 可能抛出异常的代码  
+        bool condition = false;  
+        if (!condition) {  
+            throw MyException("An error occurred!"); // 抛出自定义异常  
+        }  
+  
+        // 其他代码...  
+    } catch (const MyException& e) {  
+        // 处理自定义异常  
+        std::cerr << "Caught MyException: " << e.what() << std::endl;  
+    } catch (const std::exception& e) {  
+        // 处理其他标准异常  
+        std::cerr << "Caught std::exception: " << e.what() << std::endl;  
+    } catch (...) {  
+        // 处理未知类型的异常  
+        std::cerr << "Caught unknown exception" << std::endl;  
+    }  
+  
+    return 0;  
+}
+```
+
+## 5.2 exception类
+
+自定义异常类： 可以通过从`std::exception`（或其任何派生类）继承来创建自定义异常类。
+
+<stdexcept>中定义了标准异常，详细可以查看如下链接
+
+[https://www.runoob.com/cplusplus/cpp-exceptions-handling.html](https://www.runoob.com/cplusplus/cpp-exceptions-handling.html)
+
+```
+#include <iostream>
+#include <exception>
+using namespace std;
+ 
+struct MyException : public exception
+{
+  const char * what () const throw ()
+  {
+    return "C++ Exception";
+  }
+};
+ 
+int main()
+{
+  try
+  {
+    throw MyException();
+  }
+  catch(MyException& e)
+  {
+    std::cout << "MyException caught" << std::endl;
+    std::cout << e.what() << std::endl;
+  }
+  catch(std::exception& e)
+  {
+    //其他的错误
+  }
+}
+```
+
+## 5.3 其余异常处理
+
+### 5.3.1 abort
+
+`abort`函数是一个立即终止程序运行的函数，并返回一个非零的退出状态给操作系统。
+
+此外，`abort`还会触发`SIGABRT`信号，你可以为这个信号设置一个信号处理函数，以在程序终止前执行一些清理工作。
+
+```
+#include <cstdlib> // 包含abort的声明  
+  
+int main() {  
+    // ... 程序代码 ...  
+  
+    // 在某个条件下调用abort终止程序  
+    if (/* 某些严重错误条件 */) {  
+        abort();  
+    }  
+  
+    // ... 更多程序代码（如果abort没有被调用，这些代码将会执行） ...  
+  
+    return 0;  
+}
+```
+
+### 5.3.2 errno
+
+`errno`是一个全局变量，用于表示某些系统调用和库函数执行时发生的错误。
+
+`errno`的定义通常包含在`<errno.h>`（C语言风格）或`<cerrno>`（C++风格）头文件中。
+
+在多线程环境中，`errno`通常是每个线程局部的，这意味着每个线程都有其自己的`errno`值，不会与其他线程共享。
+
+```
+#include <iostream>  
+#include <cerrno>  
+#include <cstring> // 包含strerror的声明  
+  
+int main() {  
+    FILE *file = fopen("non_existent_file.txt", "r");  
+    if (file == nullptr) {  
+        std::cerr << "Error opening file: " << strerror(errno) << std::endl;  
+        return 1;  
+    }  
+  
+    // ... 文件的操作 ...  
+  
+    fclose(file);  
+    return 0;  
+}
+```
+
+
+
+# 6 内存与分配
+
+## 6.1 内存模型
+
+本节内容来自 [第5篇:C/C++ 内存布局与程序栈 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/184957568)
+
+
+
+
+
+## 6.2 内存分配
+
+
+
+### 6.2.1 new,delete
+
+
+
+### 6.2.2 new[],delete[]
+
+
+
+### 6.2.3 malloc,free
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 易混淆问题
+
+## 简单问题
+
+### .1 char数组的strlen和sizeof的区别
+
+|        | 说明                                                         |
+| ------ | ------------------------------------------------------------ |
+| strlen | 求第一个空字符之前的字符数目, **不包含终止空字符**           |
+| sizeof | 求数组大小, 以字节为单位, 和数组元素个数无关.  用于指针时返回指针大小. |
+
+```
+#include <cstring>  
+
+char str[] = "Hello, world!";  
+size_t len = strlen(str);  // len will be 13, because "Hello, world!" has 13 characters
+
+size_t size = sizeof(str);  // size will be 14, because the array includes the null terminator '\0'
+
+const char* ptr = "Hello, world!";  
+size_t ptr_size = sizeof(ptr);  // ptr_size will be the size of the pointer, not the length of the string
+```
+
+### .2 字符串数组拷贝函数
+
+相关头文件: <string.h>,<cstring>
+
+| 函数原型                                                |      |
+| ------------------------------------------------------- | ---- |
+| char *strcpy(char *dest, const char *src);              |      |
+| char *strncpy(char *dest, const char *src, size_t len); |      |
+| void memcpy(void *dest, const void *src, size_t n);     |      |
+
+## 3.遗漏内容
+
+goto，
+
+wchar_t
+
+volatile
+
+new/delete
+
+new[]/delete[]
+
+内存问题
+
+c++ 的字符串函数常见的
+
+c++ 日期和时间类型的运用
+
+c++ 标准输入输出
+
+
+
+
 
