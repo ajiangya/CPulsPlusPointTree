@@ -31,42 +31,6 @@
 
 ## 2.1 杂项
 
-### 预处理
-
-| 预处理指令         |                                                              |
-| ------------------ | ------------------------------------------------------------ |
-| #include           | 包含头文件                                                   |
-| #define            | 定义宏                                                       |
-| #undef             | 取消宏                                                       |
-| #ifdef             | 条件编译, ,**#ifndef #if #elif #else #endif**                |
-| #line              | 用于改变编译器报告的行号和文件名(不常用)                     |
-| #error             | 用于在预处理阶段生成一个错误消息                             |
-| #pragma            | 防止头文件重复包含                                           |
-|                    |                                                              |
-| **预处理运算符**   |                                                              |
-| #                  | **字符串化运算符**,将宏参数转换为用双引号括起来的字符串字面量 |
-| ##                 | **连接运算符**，连接两个标记以形成一个标记                   |
-| ...                | 可变参数宏, 用的不多.                                        |
-|                    |                                                              |
-| **预处理变量**     |                                                              |
-| **`__cplusplus`**  | c++始终定义的宏, 表示编译的是c++代码                         |
-| **`__DATE__`**     | 程序被编译的日期, 格式为 "Mmm dd yyyy"                       |
-| **`__TIME__`**     | 程序被编译的时间,格式为 "hh:mm:ss"                           |
-| **`__FILE__`**     | 当前源代码文件的名称,字符串                                  |
-| **`__LINE__`**     | 源代码文件中的当前行号,整型                                  |
-| **`__func__`**     | 预定义的标识符, (C++11 引入), 当前函数的名称                 |
-| **`__FUNCTION__`** |                                                              |
-| **`__VA_ARGS__`**  | 不是预定义, 在定义可变参数宏 时使用的一个特殊的标记符，用于表示可变参数列表 |
-
-### 命名空间
-
-命名空间(namespace)，防止同名冲突。
-
-用法：
-
-- using namespace【命名空间】; 不推荐，可能发生冲突
-- using【命名空间】::【变量名】
-
 ### C++标准
 
 | 发布时间 | 通称  | 说明          |
@@ -77,13 +41,67 @@
 | 2003     | C++03 | 第二个C++标准 |
 | 1998     | C++98 | 第一个C++标准 |
 
-### 面向对象
+### 命名空间
 
-**封装** 
+|      | 说明                                              |
+| ---- | ------------------------------------------------- |
+| 用途 | 命名空间(namespace)，防止同名冲突                 |
+| 用法 | using namespace【命名空间】; 不推荐，可能发生冲突 |
+|      | using【命名空间】::【变量名】                     |
 
-**继承**
+### 面向对象与面向过程
 
-**多态**
+编程范式中有:  面向过程编程和面向对象编程.
+
+| 面向过程     | 面向过程编程说明                                             |
+| ------------ | ------------------------------------------------------------ |
+| **概念**     | 通过函数和过程组织代码.                                      |
+| **优点**     | 简单/高效/模块化/线性的.                                     |
+| **缺点**     | 扩展性差/数据安全性差/代码重复.                              |
+| **应用场景** | 系统程序、嵌入式开发、小型脚本                               |
+|              |                                                              |
+| **面向对象** | **面向对象编程说明**                                         |
+| **概念**     | 通过类和对象来组织代码                                       |
+| **优点**     | 封装好/可扩展/易维护/抽象                                    |
+| **缺点**     | 性能开销/复杂/过度设计                                       |
+| **应用场景** | 大型软件系统、GUI应用、游戏开发、企业级应用系统              |
+|              |                                                              |
+| **抽象**     | 只展示必要信息, 隐藏不必要的细节                             |
+| **封装**     | 指将数据(属性)和操作数据的方法(函数)封装在一个类中，保护私有数据 |
+| **继承**     | 一个类(子类)继承另一个类(父类)的属性和方法，也称基类和派生类 |
+| **多态**     | 通过基类指针或引用，来调用派生类的方法                       |
+
+
+### 并行和并发
+
+|                      | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| **并行**             | 同时进行, 多核, 独占CPU                                      |
+| **并发**             | 交替执行, 共享CPU,                                           |
+| **决定因素**         |                                                              |
+| **硬件资源**         | 并行需要 多核处理器/多线程处理器等.                          |
+| **操作系统调度策略** | 操作系统负责进程和线程的调度, 通过调度算法决定其执行顺序.    |
+| **程序设计和编程**   | 通过合理的并行技术和并发技术来控制并行和并发. 如多线程编程/并行算法/并发数据结构的设计. |
+
+### 进程和线程
+
+|               | 说明                                                         |
+| ------------- | ------------------------------------------------------------ |
+| **进程**      | 一个程序实例, 具有独立的内存空间/代码/数据,                  |
+| **线程**      | 进程内部的一条执行路径, 共享进程的代码和数据. 有独立的线程栈和寄存器上下文. |
+|               |                                                              |
+| **相同点**    | 用于执行任务的单元                                           |
+|               | 具有**执行上下文**(寄存器+执行栈)和**资源**(文件+网络连接+内存等) |
+|               | 可以被称作系统调度和管理                                     |
+|               |                                                              |
+| **差异点**    | 说明                                                         |
+| **独立/共享** | 进程是独立实体, 具有独立的地址空间, 不同进程间不能直接访问数据. |
+|               | 线程是进程的一部分, 共享地址空间, 同进程的不同线程可以直接访问数据. |
+| **切换开销**  | 进程切换开销大, 线程开销小.                                  |
+| **创建/销毁** | 进程的创建和销毁比线程慢, 需要**分配和释放资源**;            |
+|               | 线程的创建和销毁相对较快, 因为共享进程的资源;                |
+| **崩溃**      | 进程间相互独立, 崩溃互不影响;                                |
+|               | 线程间共享相同资源, 某线程的错误可能导致整个进程的崩溃       |
 
 ### C++关键字
 
@@ -105,6 +123,158 @@
 | double           | **mutable**  | switch               | while        |
 | **dynamic_cast** | namespace    | **template**         |              |
 
+### 预处理
+
+| 预处理指令         |                                                              |
+| ------------------ | ------------------------------------------------------------ |
+| #include           | 包含头文件                                                   |
+| #define            | 定义宏                                                       |
+| #undef             | 取消宏                                                       |
+| #if                | 条件编译, **#ifdef #ifndef #else #elif #endif**              |
+| #line              | 用于改变编译器报告的行号和文件名(不常用)                     |
+| #error             | 用于在预处理阶段生成一个错误消息                             |
+| #pragma            | 防止头文件重复包含                                           |
+|                    |                                                              |
+| **预处理运算符**   |                                                              |
+| #                  | **字符串化运算符**,将宏参数转换为用双引号括起来的字符串字面量 |
+| ##                 | **连接运算符**，连接两个标记以形成一个标记                   |
+| ...                | 可变参数宏, 用的不多.                                        |
+|                    |                                                              |
+| **预处理变量**     |                                                              |
+| **`__DATE__`**     | 程序被编译的日期, 格式为 "Mmm dd yyyy"                       |
+| **`__TIME__`**     | 程序被编译的时间,格式为 "hh:mm:ss"                           |
+| **`__FILE__`**     | 当前源代码文件的名称,字符串                                  |
+| **`__LINE__`**     | 源代码文件中的当前行号,整型                                  |
+| **`__func__`**     | 预定义的标识符, (C++11 引入), 当前函数的名称                 |
+| **`__FUNCTION__`** | 函数名称                                                     |
+| **`__cplusplus`**  | c++始终定义的宏, 表示编译的是c++代码                         |
+| **`__VA_ARGS__`**  | 不是预定义, 在定义可变参数宏 时使用的一个特殊的标记符，用于表示可变参数列表 |
+
+### 编译过程
+
+| 阶段   | 说明                                 | linux         | win            |
+| ------ | ------------------------------------ | ------------- | -------------- |
+| 预处理 | **预处理指令处理**                   | .i, .cpp      | .i,.cpp        |
+| 编译   | 将预处理后的代码**转化为汇编代码**   | .o            | .obj           |
+| 汇编   | 将汇编代码**转化为机器码**           |               |                |
+| 链接   | 将所有目标模块组合**生成可执行文件** | .so,.a,无后缀 | .dll,.lib,.exe |
+
+以下是linux平台上参考的makefile
+
+```
+# 指定编译器
+CC = g++
+
+# 编译选项
+CFLAGS = -Wall -Wextra
+
+# 目标文件夹
+BUILD_DIR = build
+
+# 目标可执行文件名
+TARGET = myprogram
+
+# 源文件目录
+SRC_DIR = src
+
+# 头文件目录
+INCLUDE_DIR = include
+
+# 源文件列表
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+# 源文件列表 如果存在多级子目录的情况, 可以使用如下find命令来获取
+#SRCS := $(shell find $(SRC_DIR) -name '*.cpp')
+
+# 将源文件列表转换成对应的目标文件列表
+OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+
+# 动态库文件列表
+LDFLAGS_DYNAMIC = -L/path/to/dynamic_lib1 -ldynamic_lib1 -L/path/to/dynamic_lib2 -ldynamic_lib2
+
+# 静态库文件列表
+LDFLAGS_STATIC = -L/path/to/static_lib1 -lstatic_lib1 -L/path/to/static_lib2 -lstatic_lib2 -L/path/to/static_lib3 -lstatic_lib3
+
+# 默认目标，编译可执行文件
+all: $(BUILD_DIR) $(TARGET)
+
+# 创建目标文件夹
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+# 编译目标可执行文件
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS_DYNAMIC) $(LDFLAGS_STATIC) -o $(TARGET)
+
+# 编译源文件为目标文件
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+
+# 清理生成的目标文件和可执行文件
+clean:
+	rm -rf $(BUILD_DIR) $(TARGET)
+```
+
+以下是linux平台生成动态库和静态库的makefile示例
+
+```
+# 指定编译器
+CC = g++
+
+# 编译选项
+CFLAGS = -Wall -Wextra -fPIC
+
+# 目标文件夹
+BUILD_DIR = build
+
+# 目标文件名
+TARGET = libmylibrary
+
+# 头文件目录
+INCLUDE_DIR = include
+
+# 源文件目录
+SRC_DIR = src
+
+# 源文件列表
+SRCS := $(wildcard $(SRC_DIR)/*.cpp)
+# 源文件列表 如果存在多级子目录的情况, 可以使用如下find命令来获取
+#SRCS := $(shell find $(SRC_DIR) -name '*.cpp')
+
+# 将源文件列表转换成对应的目标文件列表
+OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+
+# 动态库文件
+LIB_DYNAMIC = $(TARGET).so
+
+# 静态库文件
+LIB_STATIC = $(TARGET).a
+
+# 默认目标，编译动态库和静态库
+all: $(BUILD_DIR) $(LIB_DYNAMIC) $(LIB_STATIC)
+
+# 创建目标文件夹
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+# 编译动态库
+$(LIB_DYNAMIC): $(OBJS)
+	$(CC) $(CFLAGS) -shared $(OBJS) -o $@
+
+# 编译静态库
+$(LIB_STATIC): $(OBJS)
+	ar rcs $@ $(OBJS)
+
+# 编译源文件为目标文件
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+
+# 清理生成的目标文件和库文件
+clean:
+	rm -rf $(BUILD_DIR) $(LIB_DYNAMIC) $(LIB_STATIC)
+```
+
+
+
 ## 2.2 数据类型
 
 ### 声明与定义
@@ -116,29 +286,30 @@
 
 ### 变量命名规则
 
-- 规则(由C++语言标准强制)
+|      | c++变量命名规则如下                                          |
+| ---- | ------------------------------------------------------------ |
+| 1    | **字母、数字和下划线**：变量名只能包含字母(a-z, A-Z)、数字(0-9)和下划线(_)。 |
+| 2    | **不能以数字开头**：变量名不能以数字开头，但可以以字母或下划线开头。 |
+| 3    | **区分大小写**：C++是区分大小写的语言，因此`variable`、`Variable`和`VARIABLE`是三个不同的变量名。 |
+| 4    | **不能是关键字**：变量名不能是C++的保留关键字，如`int`、`for`、`while`等。 |
+| 5    | **无特殊字符**：除了下划线(_)外，不能使用其他特殊字符(如`@`、`#`、`$`等)来命名变量。 |
+| 6    | **无空格**：变量名中不能包含空格。                           |
 
-  1. **字母、数字和下划线**：变量名只能包含字母(a-z, A-Z)、数字(0-9)和下划线(_)。
-  2. **不能以数字开头**：变量名不能以数字开头，但可以以字母或下划线开头。
-  3. **区分大小写**：C++是区分大小写的语言，因此`variable`、`Variable`和`VARIABLE`是三个不同的变量名。
-  4. **不能是关键字**：变量名不能是C++的保留关键字，如`int`、`for`、`while`等。
-  5. **无特殊字符**：除了下划线(_)外，不能使用其他特殊字符(如`@`、`#`、`$`等)来命名变量。
-  6. **无空格**：变量名中不能包含空格。
 
 ### 基础类型
 
-| 基础类型        | linux32(Byte) | linux64(Byte) | win32 |
-| --------------- | ------------- | ------------- | ----- |
-| bool            | 1             | 1             |       |
-| char            | 1             | 1             |       |
-| short           | 2             | 2             |       |
-| int             | 4             | 4             |       |
-| **long**        | **4**         | **8**         |       |
-| long long       | 8             | 8             |       |
-| float           | 4             | 4             |       |
-| double          | 8             | 8             |       |
-| **long double** | **12**        | **16**        |       |
-| **pointer ***   | **4**         | **8**         |       |
+| 基础类型        | linux32(Byte) | linux64 | win32 | win64 |
+| --------------- | ------------- | ------- | ----- | ----- |
+| bool            | 1             | 1       | 1     |       |
+| char            | 1             | 1       | 1     |       |
+| short           | 2             | 2       | 2     |       |
+| int             | 4             | 4       | 4     |       |
+| **long**        | **4**         | **8**   | 4     |       |
+| long long       | 8             | 8       | 4     |       |
+| float           | 4             | 4       | 4     |       |
+| double          | 8             | 8       | 8     |       |
+| **long double** | **12**        | **16**  |       |       |
+| **pointer ***   | **4**         | **8**   | 4     |       |
 
 ### 固定类型+修饰符+字面值+转移字符
 
@@ -288,13 +459,14 @@ Person p2;p2.name = "LiSi";p2.age = 8;//直接成员初始化
 
 ### enum
 
-**enum的枚举值的特点**
+|      | enum的枚举值的特点         |
+| ---- | -------------------------- |
+| 1    | 指定值时可以按照顺序       |
+| 2    | 可以为负数                 |
+| 3    | 自动递增, 从0开始/显式指定 |
+| 4    | 指定和不指定可混合使用     |
+| 5    | 枚举值可重复**不推荐**     |
 
-- 指定值时可以按照顺序
-- 可以为负数
-- 自动递增, 从0开始/显式指定
-- 指定和不指定可混合使用
-- 枚举值可重复**不推荐**
 
 ```
 // 默认从0开始 依次递增1
@@ -654,7 +826,7 @@ int main() {
 int x = 10;  
 int * const ptr = &x;  
 // *ptr = 20;  // 这是合法的，会改变x的值为20  
-// ptr++;      // 这是非法的，因为ptr是一个常量指针
+// ptr++;      // 这是非法的，因为ptr是一个常指针
 ```
 
 常量**指针**的用法
@@ -707,37 +879,38 @@ const int * const ptr = &x;
 ### 限定符
 
 
-| 限定符类型 | 引入标准 | 用途                                           |
-| -------- | -------- | ---------------------------------------------- |
-| **类型** |  |  |
-| const    | C++98    | 表示变量的值不可修改                           |
-| volatile | C++98    | 提示编译器变量可能会被外部因素修改，避免优化   |
-| mutable  | C++98    | 允许常量成员函数修改类的成员变量               |
-| restrict | C++20    | 用于指针，提示编译器该指针是访问对象的唯一方式 |
-| **存储类** |  |  |
-| static         | C++98    | 表示变量在文件作用域或函数作用域内静态存储     |
-| extern         | C++98    | 声明变量或函数在其他文件中定义                 |
-| thread_local   | C++11    | 声明每个线程都有自己实例的变量                 |
-| register       | C++98    | **C++17弃用**, 提示编译器将变量存储在寄存器中而不是内存中 |
-| **函数** |  |  |
-| inline         | C++98    | 提示编译器将函数扩展内联，减少函数调用开销     |
-| constexpr      | C++11    | 指示变量或函数在编译时求值                     |
-| noexcept       | C++11    | 指定函数不抛出异常|
-| virtual        | C++98    | 声明虚函数，允许在派生类中重写                 |
-| explicit       | C++98    | 防止隐式转换或复制构造函数的自动调用           |
-| **其他** |  |  |
-| alignas        | C++11    | 指定变量或类型的对齐要求                       |
-| alignof        | C++11    | 查询类型或变量的对齐要求                       |
-| decltype       | C++11    | 获取表达式的类型                               |
-| friend         | C++98    | 声明函数或类可以访问类的私有和受保护成员       |
-| default        | C++11    | 显式声明默认的构造函数、析构函数或拷贝/移动操作 |
-| delete         | C++11    | 显式禁止某些函数的自动生成                     |
-| final          | C++11    | 表示类或虚函数不能被继承或重写                 |
-| override       | C++11    | 表示覆盖基类中的虚函数                         |
-| **访问控制** |  |  |
-| public         | C++98    | 成员可以被任何代码访问                         |
-| protected      | C++98    | 成员只能被该类和其派生类访问                   |
-| private        | C++98    | 成员只能被该类访问                             |
+| 限定符类型    | 引入标准 | 用途                                                      |
+| ------------- | -------- | --------------------------------------------------------- |
+| **类型**      |          |                                                           |
+| const         | C++98    | 表示变量的值不可修改                                      |
+| volatile      | C++98    | 提示编译器变量可能会被外部因素修改，避免优化              |
+| mutable       | C++98    | 允许**常量成员函数修改类成员变量**                        |
+| restrict      | C++20    | 用于指针，提示编译器该指针是访问对象的唯一方式            |
+| **存储类**    |          |                                                           |
+| static        | C++98    | 表示变量在文件作用域或函数作用域内静态存储                |
+| extern        | C++98    | 声明变量或函数在其他文件中定义                            |
+| thread_local  | C++11    | 声明每个线程都有自己实例的变量                            |
+| register      | C++98    | **C++17弃用**, 提示编译器将变量存储在寄存器中而不是内存中 |
+| **函数**      |          |                                                           |
+| inline        | C++98    | 提示编译器将函数扩展内联，减少函数调用开销                |
+| **constexpr** | C++11    | 表明表达式/函数/构造函数为常量表达式,指示在编译时求值,    |
+| **noexcept**  | C++11    | 指定函数不抛出异常                                        |
+| virtual       | C++98    | 声明虚函数，允许在派生类中重写                            |
+| **explicit**  | C++98    | **防止隐式转换或复制构造函数的自动调用**                  |
+| friend        | C++98    | 声明函数或类可以访问类的私有和受保护成员                  |
+| **default**   | C++11    | **显式声明默认的构造/析构/拷贝/移动操作 函数**            |
+| **delete**    | C++11    | 显式**禁止某些函数的自动生成**                            |
+| **final**     | C++11    | 表示类或虚函数**不能被继承或重写**                        |
+| **override**  | C++11    | 表示**覆盖**基类中的虚函数                                |
+| **访问控制**  |          |                                                           |
+| public        | C++98    | 成员可以被任何代码访问                                    |
+| protected     | C++98    | 成员只能被该类和其派生类访问                              |
+| private       | C++98    | 成员只能被该类访问                                        |
+| **其他**      |          |                                                           |
+| alignas       | C++11    | 指定变量或类型的对齐要求                                  |
+| alignof       | C++11    | 查询类型或变量的对齐要求                                  |
+| decltype      | C++11    | 获取表达式的类型                                          |
+
 
 ### static
 
@@ -748,8 +921,6 @@ const int * const ptr = &x;
 | static全局函数 | 本文件可见                                                 |
 | static成员变量 | 类内定义, 类外初始化, 可类名::直接访问, 所有类对象共享一份 |
 | static成员函数 | 可类名::直接访问, 只能访问静态成员变量和静态成员函数,      |
-
-static:
 
 ```
 void foo() {  
@@ -762,7 +933,7 @@ static int global_var = 42; // 静态全局变量，只在定义它的文件中�
 static void bar() { /* ... */ } // 静态全局函数，同样只在定义它的文件中可见
 ```
 
-extern
+### extern
 
 ```
 // file1.cpp  
@@ -777,40 +948,134 @@ void use_global() {
 }
 ```
 
+### thread_local
+
+```
+#include <iostream>
+#include <thread>
+
+thread_local int myVar;  // 声明一个具有线程局部存储的变量
+
+void foo() {
+    myVar = 5;  // 在每个线程中设置不同的值
+    std::cout << "Thread ID: " << std::this_thread::get_id() << ", myVar: " << myVar << std::endl;
+}
+
+int main() {
+    std::thread t1(foo);
+    std::thread t2(foo);
+    t1.join();
+    t2.join();
+    return 0;
+}
+```
+
+### alignas
+
+```
+#include <iostream>
+#include <cstdint>
+
+struct alignas(16) MyStruct {
+    char a;
+    int32_t b;
+};
+
+int main() {
+    std::cout << alignof(MyStruct) << std::endl; // 输出MyStruct类型的对齐要求
+    return 0;
+}
+```
+
+### alignof
+
+```
+#include <iostream>
+#include <cstdlib>
+
+int main() {
+    std::cout << alignof(int) << std::endl; // 输出int类型的对齐要求
+    return 0;
+}
+```
+
+### decltype
+
+```
+#include <iostream>
+#include <typeinfo>
+
+int main() {
+    int x = 5;
+    decltype(x) y; // 推断y的类型和x相同
+    std::cout << typeid(y).name() << std::endl; // 输出y的类型名称
+    return 0;
+}
+```
+
+### noexcept
+
+```
+#include <iostream>
+
+void func() noexcept {
+    // 函数体
+}
+
+int main() {
+    std::cout << noexcept(func()) << std::endl; // 输出函数是否会抛出异常
+    return 0;
+}
+```
+
+### constexpr
+
+```
+constexpr int square(int x) {
+    return x * x;
+}
+
+int main() {
+    constexpr int value = square(5);
+    return 0;
+}
+```
+
+
+
 ## 2.6 运算符
 
 以下是C++中所有运算符的分类和符号，以表格格式列出：
 
-| 类型     | 符号                                                         |
-| -------- | ------------------------------------------------------------ |
-| 算术     | + (加), - (减), * (乘), / (除), % (取模)                     |
-| 关系     | == (等于), != (不等于), > (大于), < (小于), >= (大于等于), <= (小于等于) |
-| 逻辑     | && (逻辑与), \|\|(逻辑或), !(逻辑非)                         |
-| 位       | & (按位与), \| (按位或), ^ (按位异或), ~ (按位取反), << (左移), >> (右移) |
-| 赋值     | = (赋值), += (加后赋值), -= (减后赋值), *= (乘后赋值), /= (除后赋值), |
-|          | %= (取模后赋值), &= (按位与后赋值), \|= (按位或后赋值),      |
-|          | ^= (按位异或后赋值), <<= (左移后赋值), >>= (右移后赋值),     |
-| 增减     | ++ (递增), -- (递减)                                         |
-| 条件     | ? : (条件运算符)                                             |
-| 成员访问 | . (成员访问), -> (成员指针访问)                              |
-| 数组访问 | [] (数组下标)                                                |
-| 指针     | * (指针), & (取地址)                                         |
-| sizeof   | sizeof (求类型或变量长度)                                    |
-| 类型转换 | static_cast, dynamic_cast, const_cast, reinterpret_cast      |
-| 其他     | , (逗号), typeid, noexcept, alignof, decltype,               |
-
-| 运算符           | 说明                                                         |
+| 类型             | 符号                                                         |
 | ---------------- | ------------------------------------------------------------ |
+| 算术             | + (加), - (减), * (乘), / (除), % (取模)                     |
+| 关系             | == (等于), != (不等于), > (大于), < (小于), >= (大于等于), <= (小于等于) |
+| 逻辑             | && (逻辑与), \|\|(逻辑或), !(逻辑非)                         |
+| 位               | & (按位与), \| (按位或), ^ (按位异或), ~ (按位取反), << (左移), >> (右移) |
+| 赋值             | = (赋值), += (加后赋值), -= (减后赋值), *= (乘后赋值), /= (除后赋值), |
+|                  | %= (取模后赋值), &= (按位与后赋值), \|= (按位或后赋值),      |
+|                  | ^= (按位异或后赋值), <<= (左移后赋值), >>= (右移后赋值),     |
+| 增减             | ++ (递增), -- (递减)                                         |
+| 条件             | ? : (条件运算符)                                             |
+| 成员访问         | . (成员访问), -> (成员指针访问)                              |
+| 数组访问         | [] (数组下标)                                                |
+| 指针             | * (指针), & (取地址)                                         |
+| sizeof           | sizeof (求类型或变量长度)                                    |
+| 类型转换         | static_cast, dynamic_cast, const_cast, reinterpret_cast      |
+| 其他             | , (逗号), typeid, noexcept, alignof, decltype,               |
+|  |  |
+| **运算符**       | **说明**                                                     |
 | ,                | 逗号, 按顺序执行, 并返回最后一个表达式的值, 优先级低, 最后执行 |
 | **typeid**       | 返回表达式或类型的类型信息对象                               |
-| **noexcept**     | 异常说明运算符, 判断表达式在执行时是否不抛出异常             |
-| **alignof**      | 对齐要求运算符, 返回类型的对齐要求                           |
-| **decltype**     | 推导表达式的类型                                             |
+| **noexcept**     | 异常说明运算符, 判断表达式在执行时是否不抛出异常, [示例](#noexcept) |
+| **alignof**      | 对齐要求运算符, 返回类型的对齐要求, [示例](#alignof)          |
+| **decltype**     | 推导表达式的类型, [示例](#decltype)                    |
 |                  |                                                              |
-| static_cast      | 基础类型转换, 指针与引用转换, 基类与派生类转换(无运行时检查) |
-| dynamic_cast     | 基类指针/引用转换为派生类指针/引用, 有运行时类型检查, 失败返回空指针 |
+| static_cast      | 基础类型转换, 指针与引用转换, 基类与派生类转换(**无**运行时检查) |
+| dynamic_cast     | **基类**指针/引用转换为**派生类**指针/引用, **有运行时类型检查**, 失败返回空指针 |
 | const_cast       | 添加或移除类型的`const`或`volatile`限定符                    |
-| reinterpret_cast | 不同类型指针间的转换, 整型转指针, 无类型检查                 |
+| reinterpret_cast | 不同类型**指针间转换**, **整型转指针**, **无类型检查**       |
 
 ### 逗号表达式
 
@@ -875,6 +1140,20 @@ char* pChar = reinterpret_cast<char*>(pInt); // int*到char*的转换
 
 void* pVoid = &i;  
 int& ref = *reinterpret_cast<int*>(pVoid); // void*到int&的转换
+```
+
+### typeid
+
+```
+#include <iostream>
+#include <typeinfo>
+
+int main() {
+    int x = 5;
+    const std::type_info& typeInfo = typeid(x);
+    std::cout << typeInfo.name() << std::endl; // 输出变量类型的名称
+    return 0;
+}
 ```
 
 
@@ -1006,41 +1285,125 @@ Value is something else
 
 ## 2.8 函数
 
-### 2.8.1 参数传递
+### 传参
 
-|            | 说明                                       |
-| ---------- | ------------------------------------------ |
-| 传值       | 创建副本,  原值不可修改, 涉及数据拷贝开销. |
-| 传引用     | 别名, 避免拷贝提高效率, 可修改原值         |
-| 传指针     | 传递变量地址, 可访问和修改                 |
-| 传数组指针 | 数组指针和长度需要同时传递, 可修改原值     |
+| 参数传递   | 说明+用途+差异                                               |
+| ---------- | ------------------------------------------------------------ |
+| 传值       | 传递拷贝**副本**，函数内部修改**不影响原值**， **大对象复制性能开销大**。 |
+| 传引用     | 函数内部修改会**影响原值**，适用于需要**修改原值或避免大对象的复制**。 |
+| 传指针     | 函数内部通过指针可修改原值，适用于需要修改原值或动态内存分配。 |
+| 传函数指针 | 可在函数内部调用传递的函数，适用于**回调函数或函数作为参数**的情况。 |
+| 传数组指针 | 可在函数内部访问数组元素。                                   |
+| 默认参数   | 调用函数时可省略默认参数，适用于**提供默认行为或减少函数重载**。 |
 
-```
-void modifyArray(int* arr, int size) {  
-    for (int i = 0; i < size; i++) {  
-        arr[i] += 5; // 修改数组元素  
-    }  
-}  
-  
-int main() {  
-    int myArray[] = {1, 2, 3, 4, 5};  
-    int size = sizeof(myArray) / sizeof(myArray[0]);  
-    modifyArray(myArray, size); // 传递数组和大小  
-      
-    // 输出修改后的数组  
-    for (int i = 0; i < size; i++) {  
-        cout << myArray[i] << " "; // 输出 6 7 8 9 10  
-    }  
+#### 传值
+
+```cpp
+#include <iostream>
+
+void passByValue(int x) {
+    x = 10;
+}
+
+int main() {
+    int a = 5;
+    passByValue(a);
+    std::cout << "After passByValue: " << a << std::endl; // 输出5
+    return 0;
 }
 ```
 
-### 2.8.2 默认参数
+#### 传引用
 
-默认参数:
+```cpp
+#include <iostream>
+
+void passByReference(int &x) {
+    x = 10;
+}
+
+int main() {
+    int a = 5;
+    passByReference(a);
+    std::cout << "After passByReference: " << a << std::endl; // 输出10
+    return 0;
+}
+```
+
+#### 传指针
+
+```cpp
+#include <iostream>
+
+void passByPointer(int *x) {
+    *x = 10;
+}
+
+int main() {
+    int a = 5;
+    passByPointer(&a);
+    std::cout << "After passByPointer: " << a << std::endl; // 输出10
+    return 0;
+}
+```
+
+#### 传函数指针
+
+```cpp
+#include <iostream>
+
+void displayMessage() {
+    std::cout << "Hello, World!" << std::endl;
+}
+
+void executeFunction(void (*func)()) {
+    func();
+}
+
+int main() {
+    executeFunction(displayMessage); // 输出"Hello, World!"
+    return 0;
+}
+```
+
+#### 传数组指针
+
+```cpp
+#include <iostream>
+
+void passArrayPointer(int (*arr)[5]) {
+    for (int i = 0; i < 5; ++i) {
+        std::cout << (*arr)[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int arr[5] = {1, 2, 3, 4, 5};
+    passArrayPointer(&arr); // 输出"1 2 3 4 5"
+    return 0;
+}
+```
+
+#### 默认参数
 
 - 只能从右往走定义, 必须位于非默认参数的右侧;
 - 只在函数声明中指定一次, 多个声明中必须保持一致;
 - 函数定义(实现)中不需要再次指定.
+
+```cpp
+#include <iostream>
+
+void greet(std::string name = "World") {
+    std::cout << "Hello, " << name << "!" << std::endl;
+}
+
+int main() {
+    greet(); // 输出"Hello, World!"
+    greet("Alice"); // 输出"Hello, Alice!"
+    return 0;
+}
+```
 
 ```
 #include <iostream>  
@@ -1067,27 +1430,38 @@ void displayMessage(string message, int repeatTimes) {
 }
 ```
 
-### 2.8.3 返回值
+### 返回值
 
-返回值说明：
+| 返回值       | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| 临时变量     | 函数内局部变量. 拷贝/RVO/移动语义来实现的.                   |
+| 引用         | 返回有效引用(静态变量/全局变量/类成员), **避免函数内局部变量的引用(返回后被销毁->无效)** |
+| 指针         | 返回有效指针(**动态分配/静态全局变量**),**避免局部变量指针**(返回后被销毁->无效) |
+| 智能指针     | `std::unique_ptr`或`std::shared_ptr`                         |
+| **注意事项** |                                                              |
+|              | **避免返回函数内局部变量的指针/引用**, 离开函数作用域后, 被销毁, **导致野指针/悬挂引用** |
+|              | 可以返回**静态变量或全局变量的引用/指针**,一直存在.          |
+|              | 返回动态分配的指针时, 注意释放内存,防止内存泄漏.             |
 
-- 当函数**返回局部变量的值**时，会发生**值的拷贝**。局部变量在函数退出时被销毁，但它们的值已经被拷贝给调用者，所以这是安全的。
-- **不要返回局部变量的引用或指针**，因为局部变量在函数返回后不再存在，这将导致悬挂引用或野指针。
+#### 返回值优化（RVO）
 
-- 可以返回**局部静态变量或全局变量的引用**，因为这些变量在函数返回后仍然存在。
+- RVO是一种编译器优化技术，在函数返回时直接在调用者的上下文中构造返回值对象，而不是先在被调用函数的栈帧中构造临时对象再拷贝到调用者的上下文中。这避免了临时对象的拷贝和销毁，使得返回的对象在函数返回后依然有效。
 
-返回动态分配内存的指针
+#### 移动语义（Move Semantics）
 
-- 如果函数返回指向动态分配内存的指针(例如使用`new`操作符)，调用者有责任在适当的时候释放这块内存(使用`delete`操作符)，以避免内存泄漏。
-- 更好的做法是使用智能指针(如`std::unique_ptr`或`std::shared_ptr`)，它们可以自动管理内存的生命周期。
+- C++11引入了右值引用（rvalue references）和移动语义，使得可以高效地转移临时对象的资源，而不是拷贝它们。当函数返回临时对象时，编译器可以调用对象的移动构造函数，将资源转移到返回值中。
 
-### 2.8.4 递归函数
+### 递归函数
 
-| 递归函数定义:                                         |
-| ----------------------------------------------------- |
-| 直接或间接调用自身的函数, 用于将复杂问题分解为子问题. |
+|              | 说明                                                       |
+| ------------ | ---------------------------------------------------------- |
+| 定义         | 直接或间接调用自身的函数, 用于将复杂问题分解为子问题.      |
+| **注意事项** | **明确终止条件**, 防止无限递归, 引起栈溢出.                |
+|              | **逐步逼近**, 递归调用应当使问题规模减小, 逐步逼近终止条件 |
+|              | **控制递归深度**, 防止栈溢出,                              |
+|              | **避免重复计算**,影响性能, 可使用记忆化/动态规划来优化.    |
 
-格式:
+**函数格式**:
 
 ```
 返回类型 函数名(参数列表) {  
@@ -1103,16 +1477,7 @@ void displayMessage(string message, int repeatTimes) {
 }
 ```
 
-使用递归函数时需要注意以下几点：
-
-1. 确保递归有一个明确的终止条件，否则会导致无限递归，最终引起栈溢出。
-2. 递归调用应该使问题规模减小，逐步逼近基本情况。
-3. 对于大数据量或深层次递归，需要考虑递归的效率和栈空间的使用。有时候迭代(循环)可能是更好的选择。
-4. 在设计递归函数时，尽量保持函数简洁易懂，避免复杂的递归逻辑。
-
-
-
-示例:
+**代码示例:**
 
 ```
 #include <iostream>  
@@ -1180,52 +1545,32 @@ int main() {
 }
 ```
 
-### 2.8.5 内联函数
+### 内联函数
 
-内联函数的优缺点:
+|              | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| 定义         | **请求编译器在函数调用时用函数实体替代调用**, 适用于**频繁调用小函数**. |
+| 优点         | 减少函数调用开销, 优化代码.                                  |
+| 缺点         | 代码膨胀, 调试困难, 编译时间增加.                            |
+| **不宜内联** | 函数有: 大型,递归,含有静态变量,(含有循环/复杂控制流),虚函数, 构造和析构. |
+|              | 虚函数不宜内联: 动态绑定和静态绑定的冲突                     |
+|              | 构造和析构不宜内联: 复杂度, 编译器限制.                      |
+| 注意事项     | **内联是建议而非强制**, 编译器可以忽略.                      |
+|              | **不要过度依赖内联**, 可能导致代码膨胀及其他问题, 谨慎使用.  |
+|              | **内联函数通常定义在头文件中**：方便调用点可见               |
+|              | **类内定义的函数默认为内联函数**;                            |
 
-- 优点:效率提升, 优化编译, 代码简洁
-- 缺点:代码膨胀,编译时间增加,无法控制内联, 不适合大型函数.
-
-不易做为内联函数的:
-
-- 大型函数
-- 递归函数
-- 含有静态局部变量的函数
-- 含有循环/复杂控制流的函数
-- 虚函数：**动态绑定与静态绑定的冲突**
-- 构造和析构函数： 对象构造和销毁的复杂性，编译器限制。
-
-使用注意事项:
-
-- **内联不是强制的** 即使函数被声明为`inline`，编译器也有权选择不进行内联。内联仅是一种优化提示，而非强制指令。
-- **不要过度依赖内联**：过度使用内联可能导致代码膨胀和其他潜在问题。应该谨慎地选择哪些函数进行内联。
-- **内联函数通常定义在头文件中**：由于内联函数需要在每个调用点可见，因此它们通常定义在头文件中。
-- **类内定义的函数默认为内联函数**;
-
-## 2.9 其余关键字
+### Lambda
 
 
 
 
 
+# 3 class
 
+## 3.1 基础
 
-# 3 面向对象
-
-## 3.1 概念
-
-抽象 : 只展示必要信息，隐藏不必要的细节。
-
-封装 : 指将数据(属性)和操作数据的方法(函数)封装在一个类中，保护私有数据。
-
-继承 : 一个类(子类)继承另一个类(父类)的属性和方法，也称基类和派生类。
-
-多态 : 通过基类指针或引用，来调用派生类的方法。
-
-## 3.2 class类
-
-### 3.2.1 访问修饰符
+### 访问修饰符
 
 |           | 说明                         |
 | --------- | ---------------------------- |
@@ -1233,7 +1578,7 @@ int main() {
 | protected | 只在类内部和派生类中可访问   |
 | private   | 只在类内部和**友元**函数访问 |
 
-示例1：
+代码示例：
 
 ```
 class MyClass {  
@@ -1267,609 +1612,458 @@ int main() {
 }
 ```
 
-示例2：
+### 特殊成员函数
 
-```
-#include <iostream>  
-  
-// 基类 Shape  
-class Shape {  
-protected:  // 受保护的成员  
-    int width, height;  
-  
-public:  
-    // 设置宽度和高度的公有方法  
-    void setWidth(int w) { width = w; }  
-    void setHeight(int h) { height = h; }  
-};  
-  
-// 派生类 Rectangle 继承自 Shape  
-class Rectangle : public Shape {  
-public:  
-    // 计算面积的公有方法  
-    int getArea() {  
-        return (width * height);  // 可以直接访问 protected 成员  
-    }  
-};  
-  
-int main() {  
-    Rectangle rect;  
-  
-    // 使用公有方法设置宽度和高度  
-    rect.setWidth(5);  
-    rect.setHeight(7);  
-  
-    // 输出对象的面积  
-    std::cout << "Total area: " << rect.getArea() << std::endl;  
-  
-    // 下面的代码会产生编译错误，因为 width 和 height 是 protected 成员  
-    // std::cout << "Width: " << rect.width << std::endl;  // 错误：不能访问 protected 成员  
-    // std::cout << "Height: " << rect.height << std::endl; // 错误：不能访问 rotected 成员  
-  
-    return 0;  
-}
-```
+| 特殊成员函数     | 说明                                                      |
+| ---------------- | --------------------------------------------------------- |
+| **概念**         | 不定义时, 编译器会自动生成的成员函数.                     |
+| **包含**         | 构造, 析构, 拷贝构造, 拷贝赋值, (c++11)移动构造, 移动赋值 |
+|                  |                                                           |
+| **调用条件差异** |                                                           |
+| 构造函数         | 无初始值创建对象                                          |
+| 拷贝构造         | 初始化时, 用已存在对象/(按值传递/返回对象)                |
+| 移动构造         | 初始化时, 用临时对象/std::move转右值                      |
+| 拷贝赋值         | 赋值时, 用已存在对象                                      |
+| 移动赋值         | 赋值时, 用临时对象/std::move转右值                        |
 
-### 3.2.2 特殊成员函数
-
-特殊成员函数，**不定义时, 编译器会自动生成默认的**：
-
-- 构造函数
-- 析构函数
-- 拷贝构造函数
-- 赋值运算
-- 地址运算符
-- 移动构造函数
-- 移动赋值
 
 代码示例:
 
 ```
-class MyClass {  
-public:  
-    // 默认构造函数  
-    MyClass() {  
-        // 初始化代码  
-    }  
-  
-    // 析构函数  
-    ~MyClass() {  
-        // 清理代码  
-    }  
-  
-    // 拷贝构造函数  
-    MyClass(const MyClass& other) {  
-        // 拷贝代码  
-    }  
-  
-    // 拷贝赋值运算符  
-    MyClass& operator=(const MyClass& other) {  
-        if (this != &other) {  
-            // 赋值代码  
-        }  
-        return *this;  
-    }  
-  
-    // 移动构造函数  
-    MyClass(MyClass&& other) noexcept {  
-        // 移动代码  
-    }  
-  
-    // 移动赋值运算符  
-    MyClass& operator=(MyClass&& other) noexcept {  
-        // 移动赋值代码  
-        return *this;  
-    }  
-  
-private:  
-    // 类成员  
+#include <iostream>
+#include <string>
+
+class MyClass {
+public:
+    std::string name;
+    int value;
+
+    // 默认构造函数
+    MyClass() : name("default"), value(0) {
+        std::cout << "Default constructor called" << std::endl;
+    }
+
+    // 析构函数
+    ~MyClass() {
+        std::cout << "Destructor called" << std::endl;
+    }
+
+    // 拷贝构造函数
+    MyClass(const MyClass& other) : name(other.name), value(other.value) {
+        std::cout << "Copy constructor called" << std::endl;
+    }
+
+    // 拷贝赋值运算符
+    MyClass& operator=(const MyClass& other) {
+        if (this != &other) {
+            name = other.name;
+            value = other.value;
+        }
+        std::cout << "Copy assignment operator called" << std::endl;
+        return *this;
+    }
+
+    // 移动构造函数
+    MyClass(MyClass&& other) noexcept : name(std::move(other.name)), value(other.value) {
+        other.value = 0;
+        std::cout << "Move constructor called" << std::endl;
+    }
+
+    // 移动赋值运算符
+    MyClass& operator=(MyClass&& other) noexcept {
+        if (this != &other) {
+            name = std::move(other.name);
+            value = other.value;
+            other.value = 0;
+        }
+        std::cout << "Move assignment operator called" << std::endl;
+        return *this;
+    }
+
+    // 自定义函数
+    void display() const {
+        std::cout << "Name: " << name << ", Value: " << value << std::endl;
+    }
 };
-```
 
-### 3.2.3 class 和 static
+int main() {
+    MyClass obj1;//默认构造
+    obj1.display();
 
-|                    | 说明                                                         |
-| ------------------ | ------------------------------------------------------------ |
-| static静态成员变量 | 只有一份，所有类共享；类中申明，类外定义和初始化。可通过 :: 或 对象来访问。 |
-| static静态成员函数 | 只能访问静态成员变量和静态成员函数； 可通过 :: 来访问。      |
+    MyClass obj2("custom", 10);//自定义构造
+    obj2.display();
 
-**static 成员的访问属性也分为public/protected/private**.
+    MyClass obj3 = obj2; // 拷贝构造
+    obj3.display();
 
-代码示例：
+    MyClass obj4 = std::move(obj2); // 移动构造
+    obj4.display();
+    obj2.display(); // 被移动后的对象
 
-```
-// header file: MyClass.h  
-#ifndef MYCLASS_H  
-#define MYCLASS_H  
-  
-class MyClass {  
-public:  
-    // 静态数据成员的声明  
-    static int staticVar;  
-  
-    // 静态函数成员的声明  
-    static void staticFunc();  
-  
-    // 非静态函数成员  
-    void nonStaticFunc();  
-};  
-  
-// 静态数据成员的定义和初始化  
-// 注意：这通常在类的实现文件(.cpp)中完成，但为了简洁，这里放在头文件中了  
-int MyClass::staticVar = 0;  
-  
-#endif // MYCLASS_H  
-```
+    obj3 = obj4; // 拷贝赋值
+    obj3.display();
 
-```
-// implementation file: MyClass.cpp  
-#include "MyClass.h"  
-#include <iostream>  
-  
-// 静态函数成员的定义  
-void MyClass::staticFunc() {  
-    std::cout << "Static function called. StaticVar: " << staticVar << std::endl;  
-}  
-  
-// 非静态函数成员的定义  
-void MyClass::nonStaticFunc() {  
-    std::cout << "Non-static function called." << std::endl;  
-    // 可以访问静态成员  
-    staticVar++;  
-    staticFunc();  
-}  
-```
+    obj3 = std::move(obj4); // 移动赋值
+    obj3.display();
+    obj4.display(); // 被移动后的对象
 
-```
-// main.cpp  
-#include "MyClass.h"  
-  
-int main() {  
-    // 访问静态数据成员  
-    MyClass::staticVar = 42;  
-  
-    // 调用静态函数成员  
-    MyClass::staticFunc();  
-  
-    // 创建对象并调用非静态函数成员  
-    MyClass obj;  
-    obj.nonStaticFunc();  
-  
-    // 注意：尽管我们调用了nonStaticFunc()一次，但staticVar增加了两次，  
-    // 因为nonStaticFunc()内部也调用了staticVar++和staticFunc()  
-  
-    return 0;  
+    return 0;
 }
-```
-
-### 3.2.4 class 和 const
-
-**const对象依然可以使用 public/protected/private修饰**.
-
-|                        | 说明                                                         |
-| ---------------------- | ------------------------------------------------------------ |
-| 常量成员函数           | 不能修改类的**非静态数据成员**, 定义时加const                |
-| 常量成员变量           | 必须在**构造函数初始化列表初始化**，且**后续不能修改**       |
-| 静态常量成员数据       | 属于类，静态常量整型可在类内直接初始化，其他必须在类外定义和初始化. |
-| 常量对象               | 只能调用常量成员函数.                                        |
-| 常量引用和常量指针成员 | **必须初始化**, 且**不能通过它们来修改**所引用的数据。       |
-
-常成员函数:
 
 ```
-class MyClass {  
-public:  
-    int value;  
-  
-    MyClass(int v) : value(v) {}  
-  
-    // 常量成员函数  
-    int getValue() const {  
-        return value;  
-        // value = 42; // 错误！不能在常量成员函数中修改非静态数据成员  
-    }  
-};  
-  
-int main() {  
-    const MyClass obj(10); // 声明一个常量对象  
-    int val = obj.getValue(); // 可以调用常量成员函数  
-    // obj.value = 20; // 错误！obj 是常量对象  
-    return 0;  
-}
-```
-
-常成员变量:
-
-```
-class MyClass {  
-public:  
-    const int constantValue; // 常量成员  
-  
-    MyClass(int value) : constantValue(value) {} // 在初始化列表中初始化常量成员  
-};  
-  
-int main() {  
-    MyClass obj(10);  
-    // obj.constantValue = 20; // 错误！不能修改常量成员  
-    return 0;  
-}
-```
-
-静态常量成员:
-
-```
-class MyClass {  
-public:  
-    static const int staticConstant = 42; // 静态常量整型成员，类内初始化  
-    static const double staticConstantDouble; // 静态常量非整型成员，类内声明  
-};  
-  
-const double MyClass::staticConstantDouble = 3.14; // 类外定义和初始化  
-  
-int main() {  
-    int val = MyClass::staticConstant; // 访问静态常量成员  
-    double dVal = MyClass::staticConstantDouble;  
-    return 0;  
-}
-```
-
-常量引用和指针成员:
-
-```
-class MyClass {  
-public:  
-    const int& ref; // 常量引用成员  
-    const int* const ptr; // 指向常量的常量指针成员  
-  
-    MyClass(int& r, int* p) : ref(r), ptr(p) {}  
-};  
-  
-int main() {  
-    int x = 10;  
-    int y = 20;  
-    MyClass obj(x, &y);  
-    // obj.ref = 30; // 错误！不能通过常量引用来修改数据  
-    // obj.ptr = &x; // 错误！ptr 是常量指针，不能改变它所指向的地址  
-    // *obj.ptr = 40; // 错误！不能通过指向常量的指针来修改数据  
-    return 0;  
-}
-```
 
 
 
-## 3.3 class继承
+## 3.2 继承
 
-### 3.3.1 概念 
+### 概念和访问权限
 
-一个类继承另一个类，被继承的叫父类/基类，继承的叫子类/派生类。
+|              | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| 概念         | 一个类继承自另一个类, 被继承的叫父类/基类, 另一个叫子类/派生类. |
+| 继承属性     | public, protected, private                                   |
+| **调用顺序** |                                                              |
+| 构造函数     | 先基类, 后派生类.                                            |
+| 析构函数     | 先派生类, 后基类.                                            |
 
-### 3.3.2 继承控制(访问权限)
+| 继承\基类     | public 成员 | protected成员 | private成员 |
+| ------------- | ----------- | ------------- | ----------- |
+| public继承    | public      | protected     | private     |
+| protected继承 | protected   | protected     | private     |
+| private继承   | private     | private       | private     |
 
-第一行：基类的成员访问属性，第一列：派生类对基类的继承类型。其余是基类成员在派生类中的访问属性。
+代码示例:
 
-|                | public 成员 | protected 成员 | private 成员 |
-| -------------- | ----------- | -------------- | ------------ |
-| public 继承    | public      | protected      | private      |
-| protected 继承 | protected   | protected      | private      |
-| private 继承   | private     | private        | private      |
-
-调用顺序:
-
-构造函数: 先调用基类, 再调用派生类.
-
-析构函数: 先调用派生类, 再调用基类.
-
-### 3.3.3 重载、覆盖(重写)、隐藏
-
-|      | 说明                                                         |
-| ---- | ------------------------------------------------------------ |
-| 重载 | **Overload**,同一作用域, 名字相同参数列表不同的函数.         |
-| 覆盖 | **Override**, 重写, 派生类中与基类具有名字+参数列表+返回类型均相同的**虚函数**, 实现替换. |
-| 隐藏 | **Hide**派生类的函数与**基类的非虚函数**具有相同名字, 基类的函数会被隐藏. |
-
-|      | 作用域       | 名字+参数列表+返回类型               | 虚函数?  |
-| ---- | ------------ | ------------------------------------ | -------- |
-| 重载 | 同一作用域   | 名字相同, 参数列表不同, 返回类型无关 | 无关     |
-| 覆盖 | 基类和派生类 | 名字/参数列表/返回类型,均相同        | 虚函数   |
-| 隐藏 | 基类和派生类 | 名字相同                             | 非虚函数 |
-
-注意点: 隐藏, 基类指针/引用调用该函数, 调用的是基类的版本; 派生类对象被当做基类对象使用时, 直接调用该函数,则会因为名字隐藏而导致编译错误/警告.
-
-```
-重载
-void foo(int a);    // 函数foo，接受一个int参数  
-void foo(double a); // 函数foo的重载版本，接受一个double参数
 ```
 
 ```
-覆盖
-class Base {  
-public:  
-    virtual void bar() { /* 基类实现 */ }  
-};  
 
-class Derived : public Base {  
-public:  
-    void bar() override { /* 派生类覆盖实现 */ }  
+### 重载, 覆盖(重写),隐藏
+
+|      | 说明                                          |
+| ---- | --------------------------------------------- |
+| 重载 | 类中函数名相同, 参数列表不同(类型/个数/顺序). |
+| 覆盖 | 派生类重新定义基类中的虚函数.                 |
+| 隐藏 | 派生类定义一个与基类同名, 参数列表不同的函数. |
+
+|      | 英文     | 作用域       | 名字+参数列表+返回类型               | 虚函数   |
+| ---- | -------- | ------------ | ------------------------------------ | -------- |
+| 重载 | Overload | 同一作用域   | 名字相同, 参数列表不同, 返回类型无关 | 无关     |
+| 覆盖 | Override | 基类和派生类 | 名字/参数列表/返回类型,均相同        | 虚函数   |
+| 隐藏 | Hide     | 基类和派生类 | 名字相同                             | 非虚函数 |
+
+代码示例
+
+```
+#include <iostream>
+
+// 基类
+class Base {
+public:
+    void func(int x) { // 非虚函数
+        std::cout << "Base func(int): " << x << std::endl;
+    }
+
+    virtual void virtualFunc() { // 虚函数
+        std::cout << "Base virtualFunc" << std::endl;
+    }
+
+    void overloadedFunc(int x) { // 重载函数
+        std::cout << "Base overloadedFunc(int): " << x << std::endl;
+    }
+
+    void overloadedFunc(double x) { // 重载函数
+        std::cout << "Base overloadedFunc(double): " << x << std::endl;
+    }
 };
-```
 
-```
-隐藏
-class Base {  
-public:  
-    void baz() { /* 基类实现 */ }  
-};  
+// 派生类
+class Derived : public Base {
+public:
+    void func() { // 隐藏
+        std::cout << "Derived func()" << std::endl;
+    }
 
-class Derived : public Base {  
-public:  
-    void baz(int a) { /* 派生类隐藏了基类的baz()函数 */ }  
+    void virtualFunc() override { // 覆盖
+        std::cout << "Derived virtualFunc" << std::endl;
+    }
+
+    void overloadedFunc(int x) { // 重载（基类同名函数被隐藏）
+        std::cout << "Derived overloadedFunc(int): " << x << std::endl;
+    }
 };
-```
 
-隐藏完整示例:
+int main() {
+    Base base;
+    Derived derived;
 
-```
-#include <iostream>  
-  
-class Base {  
-public:  
-    void show() {  
-        std::cout << "Base::show()" << std::endl;  
-    }  
-};  
-  
-class Derived : public Base {  
-public:  
-    // 这里的show函数隐藏了基类中的show函数  
-    void show(int x) {  
-        std::cout << "Derived::show(int) with value: " << x << std::endl;  
-    }  
-};  
-  
-int main() {  
-    Derived d;  
-    // 调用派生类的show函数，需要传递一个参数  
-    d.show(5);  
-      
-    // 错误：尝试调用没有参数的show函数，但编译器找不到这样的函数  
-    // 因为基类的show函数被隐藏了  
-    // d.show(); // 这行会导致编译错误  
-  
-    // 正确：使用基类作用域运算符来调用基类中被隐藏的show函数  
-    d.Base::show();  
-  
-    return 0;  
+    base.func(10); // 调用 Base::func(int)
+    derived.func(); // 调用 Derived::func()，隐藏 Base::func(int)
+
+    base.virtualFunc(); // 调用 Base::virtualFunc
+    derived.virtualFunc(); // 调用 Derived::virtualFunc（覆盖）
+
+    base.overloadedFunc(10); // 调用 Base::overloadedFunc(int)
+    base.overloadedFunc(3.14); // 调用 Base::overloadedFunc(double)
+
+    derived.overloadedFunc(10); // 调用 Derived::overloadedFunc(int)，Base::overloadedFunc(double) 被隐藏
+
+    return 0;
 }
 ```
 
-### 3.3.4 多继承与虚继承
+### 单继承与多继承
 
-**多继承**: 同事从多个基类继承.
-
-```
-class Base1 {  
-    // ...  
-};  
-  
-class Base2 {  
-    // ...  
-};  
-  
-class Derived : public Base1, public Base2 {  
-    // Derived 类同时继承自 Base1 和 Base2  
-};
-```
-
-**虚继承** : 解决多继承中存在多个同一基类的问题.
-
-```
-class Top {  
-    // ...  
-};  
-  
-class Left : virtual public Top {  
-    // ...  
-};  
-  
-class Right : virtual public Top {  
-    // ...  
-};  
-  
-class Bottom : virtual public Left,virtual public Right {  
-    // 由于 Left 和 Right 虚继承自 Top，Bottom 类中只有一个 Top 的子对象  
-};
-```
-
-**虚继承原理**: 
-
-1. **虚基类指针(Virtual Base Class Pointer)**：
-   当一个类虚继承自一个基类时，编译器会在**派生类对象中**插入一个**指向虚基类的指针**，通常称为虚基类指针(vptr)。这个指针用于定位虚基类子对象在派生类对象中的位置。
-
-2. **虚基类表(Virtual Base Class Table)**：
-   与虚函数表(vtable)类似，编译器可能会为每个包含虚基类的对象生成一个虚基类表(vbtable)。虚基类表中包含了调整派生类对象指针以正确指向虚基类成员的偏移量。
-
-3. **内存布局**：
-   在包含虚基类的派生类对象中，虚基类子对象通常位于对象的内存布局的开始部分。紧接着是各个直接基类的子对象，这些子对象中不再包含虚基类子对象(因为已经被共享)。最后是派生类自己的成员。
-
-4. **构造与析构**：
-   在构造派生类对象时，虚基类的构造函数首先被调用，且只调用一次。接着是直接基类的构造函数，最后是派生类的构造函数。析构函数的调用顺序与构造函数相反。
-
-   构造：虚基类的构造(只一次)-》直接基类的构造-》派生类的构造
-
-   析构：相反。
-
-5. **访问控制**：
-   虚继承不会改变基类的访问权限。如果基类中的成员在基类中是私有的，那么它在派生类中仍然是不可访问的。
-
-### 3.3.5 虚函数(说明,原理,注意事项)
-
-虚函数是实现**动态多态性的关键机制**, 通过基类指针/引用调用派生类对象实现.
-
-**虚函数的原理**：
-
-1. **虚函数表(vtable)**：
-   
-   虚函数表是一个存储虚函数地址的数组.
-   
-   当一个类中有虚函数时,编译器 **编译时**会为该类**创建**一个虚函数表, 并**初始化**. 
-   
-   如果派生类重写了基类的虚函数，则虚表中对应的条目将指向派生类的函数实现.
-   
-2. **虚指针(vptr)**：
-
-   指向虚函数表的指针，称为虚指针(vptr).
-
-   **编译时**编译器会在类的内存布局中**预留一个指针**大小的空间来存放vptr， 这个空间是每个对象实例的一部分.
-
-   对象实例化**构造函数的列表初始化**时，对虚指针进行初始化为指向该类的vtable的地址。
-
-   每个对象都有自己的虚指针，为对象的第一个数据成员.
-
-3. **动态绑定**：
-   当通过基类指针或引用调用虚函数时，程序会在运行时查看该指针或引用所指向对象的虚指针，进而查找虚函数表，以确定应该调用哪个函数。这就是动态绑定的过程。
-
-4. **重写(Override)**：
-   在派生类中，如果提供了一个与基类虚函数签名相同的函数，那么这个函数将重写基类的虚函数。在派生类对象的虚函数表中，相应的槽位会指向派生类的这个函数。
+|        | 说明                                                 |
+| ------ | ---------------------------------------------------- |
+| 单继承 | 一个基类, 用于简单明确的场景,                        |
+| 多继承 | 多个基类, 用于需要多个类的行为和属性场景,            |
+|        |                                                      |
+| 多继承 | **多继承使用注意事项**                               |
+|        | 可能引入二义性, 小心处理. 如存在多个同名函数/变量时. |
+|        | **菱形继承**时可使用**虚基类**来解决.                |
 
 代码示例: 
 
 ```
-//声明虚函数
-class Base {  
-public:  
-    virtual void func() { /* 基类实现 */ }  
+#include <iostream>
+#include <string>
+
+// 基类 Animal
+class Animal {
+public:
+    void eat() {
+        std::cout << "Animal is eating." << std::endl;
+    }
 };
 
-//继承并重写虚函数
-class Derived : public Base {  
-public:  
-    void func() override { /* 派生类实现 */ }  
+// 基类 Mammal
+class Mammal {
+public:
+    void giveBirth() {
+        std::cout << "Mammal gives birth to live young." << std::endl;
+    }
 };
 
-//通过基类指针或引用调用虚函数
-//指针
-Base *ptr = new Derived();  
-ptr->func();  // 将调用 Derived 类的 func 实现  
-delete ptr;   // 不要忘记删除动态分配的对象
-//引用
-Base &ref = *static_cast<Derived*>(new Derived());  
-ref.func();  // 将调用 Derived 类的 func 实现  
-// 注意：这里存在内存泄漏，因为 new 返回的对象没有被删除  
-// 在实际代码中，应避免这种写法，或者使用智能指针来管理资源
-```
+// 派生类 Dog，单继承自 Animal
+class Dog : public Animal {
+public:
+    void bark() {
+        std::cout << "Dog is barking." << std::endl;
+    }
+};
 
-**虚函数使用注意事项**:
+// 派生类 Bat，继承自 Animal 和 Mammal
+class Bat : public Animal, public Mammal {
+public:
+    void fly() {
+        std::cout << "Bat is flying." << std::endl;
+    }
+};
 
-1. 派生类重写虚函数时, 加上virtual 和 override, 便于编译器检查.
-2. 避免隐藏虚函数: 若派生类的函数与基类的虚函数同名不同参数列表, 将会导致该问题, 要保持一致正确重写.
-3. 析构函数声明为虚函数: 通过基类指针删除派生类对象时, 调用基类的析构, 防止出现资源泄漏.
-4. 构造函数不能为虚函数:  构造函数调用时,对象类型已确定, 无需动态绑定. 构造函数创建对象时, 对象还没有实例化完成, 内存空间还没有, **无法找到虚表**. 
-5. 虚函数不能删除/修改/中间插入, 否则会导致虚表错乱, 函数调用出错.
+int main() {
+    Dog dog;
+    Bat bat;
 
-### 3.3.6 纯虚函数和抽象类
+    // Dog 的单继承示例
+    dog.eat();   // 从 Animal 继承
+    dog.bark();  // Dog 自己的行为
 
-**纯虚函数**: 声明函数时最后加 = 0, 表示为纯虚函数, 只有声明没有定义实现.
+    // Bat 的多继承示例
+    bat.eat();      // 从 Animal 继承
+    bat.giveBirth(); // 从 Mammal 继承
+    bat.fly();       // Bat 自己的行为
 
-**抽象类**: 有纯虚函数的类称为抽象类, 抽象类不能实例化, 一般作为基类. 
-
-​		 派生类继承时必须实现纯虚函数, 否则也不能实例化.
-
-示例:
-
-```
-#include <iostream>  
-  
-// 抽象基类 Shape  
-class Shape {  
-public:  
-    // 纯虚函数  
-    virtual void draw() const = 0; // 注意 "= 0" 表示这是一个纯虚函数  
-    virtual ~Shape() = default;    // 虚析构函数，虽然不是必需的，但通常是一个好习惯  
-};  
-  
-// 派生类 Circle  
-class Circle : public Shape {  
-public:  
-    void draw() const override {  
-        std::cout << "Drawing a circle..." << std::endl;  
-    }  
-};  
-  
-// 派生类 Rectangle  
-class Rectangle : public Shape {  
-public:  
-    void draw() const override {  
-        std::cout << "Drawing a rectangle..." << std::endl;  
-    }  
-};  
-  
-int main() {  
-    // Shape s; // 错误！不能实例化抽象类  
-  
-    Circle c;  
-    c.draw(); // 输出: Drawing a circle...  
-  
-    Rectangle r;  
-    r.draw(); // 输出: Drawing a rectangle...  
-  
-    return 0;  
+    return 0;
 }
 ```
 
 
+### 虚继承
 
-## 3.4 多态
+|              | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| **菱形继承** | 在多继承中, 当一个类从多个途径继承自同一基类时, 该类存在多个基类实例, |
+|              | 二义性: 导致编译器无法确定该使用哪一个基类的成员.            |
+|              | 浪费存储空间:                                                |
+| **虚基类**   | 即继承时, 加上virtual,                                       |
+| **虚基指针** | Virtual Base Class Pointer, 简称 VBP, 用于指向虚基类实例的指针. |
+|              | 每个虚继承的派生类**对象**中都包含**一个/多个**虚基类指针,   |
+|              | 确保每个虚基类只有一个实例.                                  |
+| **虚基类表** | Virtual Base Class Table，简称 VBT,用于存储虚基类指针的地址表. |
+|              |                                                              |
+|              |                                                              |
+|              |                                                              |
+|              |                                                              |
+|              |                                                              |
+|              |                                                              |
 
-c++ 多态分为编译时多态和运行时多态。
 
-|            | 说明                                                     |
-| ---------- | -------------------------------------------------------- |
-| 编译时多态 | 静态多态, 静态绑定, 编译时确定. 有函数**重载**，**模板** |
-| 运行时多态 | 动态多态, 动态绑定, 运行时确定.  虚函数                  |
+
+代码示例：
 
 ```
-#include <iostream>  
-#include <string>  
-  
-// 编译时多态：函数重载  
-void print(int x) {  
-    std::cout << "Printing int: " << x << std::endl;  
-}  
-  
-void print(const std::string& str) {  
-    std::cout << "Printing string: " << str << std::endl;  
-}  
-  
-// 运行时多态：虚函数  
-class Base {  
-public:  
-    virtual void sayHello() const {  
-        std::cout << "Hello from Base!" << std::endl;  
-    }  
-    virtual ~Base() = default;  
-};  
-  
-class Derived : public Base {  
-public:  
-    void sayHello() const override {  
-        std::cout << "Hello from Derived!" << std::endl;  
-    }  
-};  
-  
-int main() {  
-    // 编译时多态示例  
-    print(42);          // 调用 print(int)  
-    print("Hello");     // 调用 print(const std::string&)  
-  
-    // 运行时多态示例  
-    Base* basePtr = new Derived();  
-    basePtr->sayHello();  // 动态绑定到 Derived::sayHello()  
-    delete basePtr;  
-  
-    return 0;  
+#include <iostream>
+
+class A {
+public:
+    int aValue;
+    A() : aValue(0) { std::cout << "A's constructor" << std::endl; }
+    ~A() { std::cout << "A's destructor" << std::endl; }
+    void showA() { std::cout << "A's value: " << aValue << std::endl; }
+};
+
+class B : virtual public A {
+public:
+    int bValue;
+    B() : bValue(1) { std::cout << "B's constructor" << std::endl; }
+    ~B() { std::cout << "B's destructor" << std::endl; }
+};
+
+class C : virtual public A {
+public:
+    int cValue;
+    C() : cValue(2) { std::cout << "C's constructor" << std::endl; }
+    ~C() { std::cout << "C's destructor" << std::endl; }
+};
+
+class D : public B, public C {
+public:
+    int dValue;
+    D() : dValue(3) { std::cout << "D's constructor" << std::endl; }
+    ~D() { std::cout << "D's destructor" << std::endl; }
+};
+
+int main() {
+    D d;
+    d.aValue = 10;
+    d.bValue = 20;
+    d.cValue = 30;
+    d.dValue = 40;
+
+    d.showA();
+    std::cout << "B's value: " << d.bValue << std::endl;
+    std::cout << "C's value: " << d.cValue << std::endl;
+    std::cout << "D's value: " << d.dValue << std::endl;
+
+    return 0;
+
 }
 ```
+
+如上代码中ABCD四各类的内存模型如下
+
+```
+//A 类的内存模型, 不涉及虚基类表
++---------------------------+
+| A object                  |
++---------------------------+
+| A::aValue                 | // A class member
++---------------------------+
+
+//B 类的内存模型
++---------------------------+
+| B object                  |
++---------------------------+
+| B::bValue                 | // B class member
++---------------------------+
+| VBP for A                 | // Virtual Base Pointer for A
++---------------------------+
+| A subobject               |
+|   +---------------------+ |
+|   | A::aValue           | | // A class member
+|   +---------------------+ |
++---------------------------+
+
+//C 类的内存模型
++---------------------------+
+| C object                  |
++---------------------------+
+| C::cValue                 | // C class member
++---------------------------+
+| VBP for A                 | // Virtual Base Pointer for A
++---------------------------+
+| A subobject               |
+|   +---------------------+ |
+|   | A::aValue           | | // A class member
+|   +---------------------+ |
++---------------------------+
+
+//D 类的内存模型
++---------------------------+
+| D object                  |
++---------------------------+
+| D::dValue                 | // D class member
++---------------------------+
+| VBP for A (from B)        | // Virtual Base Pointer for A via B
++---------------------------+
+| VBP for A (from C)        | // Virtual Base Pointer for A via C
++---------------------------+
+| B subobject               |
+|   +---------------------+ |
+|   | B::bValue           | | // B class member
+|   +---------------------+ |
+|   | VBP for A           | | // Virtual Base Pointer for A
+|   +---------------------+ |
++---------------------------+
+| C subobject               |
+|   +---------------------+ |
+|   | C::cValue           | | // C class member
+|   +---------------------+ |
+|   | VBP for A           | | // Virtual Base Pointer for A
+|   +---------------------+ |
++---------------------------+
+| A subobject               |
+|   +---------------------+ |
+|   | A::aValue           | | // A class member
+|   +---------------------+ |
++---------------------------+
+
+```
+
+
+
+## 3.3 virtual
+
+### 虚函数和纯虚函数
+
+| 概念     | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 虚函数   | virtual成员函数,允许派生类重写, 可通过基类指针/引用调用派生类对象 |
+| 纯虚函数 | virtual和=0的成员函数, 基类只声明不实现, 派生类必须提供具体实现. |
+| 抽象类   | 含有纯虚函数的类, 称为抽象类, 不能实例化.                    |
+|          |                                                              |
+|          | **虚函数使用注意事项**                                       |
+| 1        | 派生类重写虚函数时, 加上virtual和override,编译编译器检查     |
+| 2        | 避免隐藏虚函数, 确保为重写,而不是隐藏                        |
+| 3        | 析构函数声明为虚函数, 基类指针/引用删除派生类对象时, 调动基类析构,防止资源泄漏 |
+| 4        | 虚函数不能删除/修改/中间插入, 防止虚表错乱, 函数调用出错.    |
+| 5        | 构造函数不能为虚函数.                                        |
+|          |                                                              |
+|          | **构造函数不能为虚函数的原因**                               |
+| 1        | 构造函数调用时, 对象类型已确定,无需动态绑定.                 |
+| 2        | 创建对象时, 对象未实例化完成, 内存空间不存在, 无法找到虚表.  |
+
+
+
+
+
+
+### 虚函数指针和虚表
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2052,7 +2246,7 @@ C++中的操作符重载有一些限制，这些限制旨在保持语言的一�
 
 9. **二义性的避免**：
    当存在多个可能的操作符重载版本时，编译器必须能够唯一确定应该使用哪个版本。如果编译器无法确定，则会产生编译错误。
-   
+
 10. **new和delete**：
 
    必须重载为类成员函数和全局函数，不能重载为局部函数和类友元函数。
