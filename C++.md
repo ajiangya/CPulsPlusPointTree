@@ -403,26 +403,19 @@ int matrix[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}; // 二维整�
 
 ### 指针
 
-空指针
-
 ```
+//空指针
 NULL //传统的 C 风格空指针常量, <cstddef> 不推荐使用, 可能引起类型安全问题
 nullptr //c++11引入, 类型安全
 0 //不推荐
-```
 
-普通指针：
-
-```
+//普通指针：
 int var = 10; // 声明一个整型变量  
 int *ptr; // 声明一个整型指针变量
 ptr = &var; // 将var的地址赋给ptr指针
 int value = *ptr; // 通过指针访问变量的值
-```
 
-指向指针的指针：
-
-```
+//指向指针的指针：
 int x = 10; // 声明一个整型变量  
 int *p = &x; // 声明一个整型指针变量，并将x的地址赋给它  
 int **pp = &p; // 声明一个整型指向指针的指针变量，并将p的地址赋给它 
@@ -820,28 +813,22 @@ int main() {
 | 指向常量的常指针 | 指针和指向都是常量                                           |
 | **写法根本**     | **const靠右修饰原则**                                        |
 
-指针**常量**的用法
-
 ```
+//**指针常量的用法**
 int x = 10;  
 int * const ptr = &x;  
 // *ptr = 20;  // 这是合法的，会改变x的值为20  
 // ptr++;      // 这是非法的，因为ptr是一个常指针
-```
 
-常量**指针**的用法
-
-```
+//**常量指针的用法**
 int x = 10;  
 const int * ptr = &x;  
 int const * ptr = &x;
 // *ptr = 20;  // 这是非法的，因为ptr指向一个常量  
 // ptr++;      // 这是合法的，因为ptr本身不是常量
-```
 
-指向常量的常指针:
 
-```
+//**指向常量的常指针**
 int x = 10;  
 const int * const ptr = &x;  
 // *ptr = 20;  // 这是非法的，因为ptr指向一个常量  
@@ -1220,17 +1207,16 @@ do
 
 ### 条件
 
-|        | 说明                                              |
-| ------ | ------------------------------------------------- |
-| if     | if,else if, else                                  |
-| switch | switch, case, break, default. 只能用于整型/枚举值 |
-
-**switch 使用注意事项**：
-
-- switch必须是整型表达式， case必须是整型
-- 不允许有重复的case标签
-- 缺少break的影响，会穿透到下一个case/default分支，导致意外行为。
-- 不能在case标签中申明变量
+|        | 说明                                                         |
+| ------ | ------------------------------------------------------------ |
+| if     | if,else if, else                                             |
+| switch | switch, case, break, default. 只能用于整型/枚举值            |
+|        |                                                              |
+| switch | **switch使用注意事项**                                       |
+|        | switch必须是整型表达式， case必须是整型                      |
+|        | 不允许有重复的case标签                                       |
+|        | 缺少break的影响，会穿透到下一个case/default分支，导致意外行为。 |
+|        | 不能在case标签中申明变量                                     |
 
 ```
 #include <iostream>  
@@ -1295,6 +1281,11 @@ Value is something else
 | 传函数指针 | 可在函数内部调用传递的函数，适用于**回调函数或函数作为参数**的情况。 |
 | 传数组指针 | 可在函数内部访问数组元素。                                   |
 | 默认参数   | 调用函数时可省略默认参数，适用于**提供默认行为或减少函数重载**。 |
+|            |                                                              |
+| 默认参数   | **默认参数使用注意事项**                                     |
+|            | 只能从右往走定义, 必须位于非默认参数的右侧;                  |
+|            | 只在函数声明中指定一次, 多个声明中必须保持一致;              |
+|            | 函数定义(实现)中不需要再次指定.                              |
 
 #### 传值
 
@@ -1387,9 +1378,11 @@ int main() {
 
 #### 默认参数
 
-- 只能从右往走定义, 必须位于非默认参数的右侧;
-- 只在函数声明中指定一次, 多个声明中必须保持一致;
-- 函数定义(实现)中不需要再次指定.
+|      | 默认参数使用注意事项                            |
+| ---- | ----------------------------------------------- |
+| 1    | 只能从右往走定义, 必须位于非默认参数的右侧;     |
+| 2    | 只在函数声明中指定一次, 多个声明中必须保持一致; |
+| 3    | 函数定义(实现)中不需要再次指定.                 |
 
 ```cpp
 #include <iostream>
@@ -1438,18 +1431,18 @@ void displayMessage(string message, int repeatTimes) {
 | 引用         | 返回有效引用(静态变量/全局变量/类成员), **避免函数内局部变量的引用(返回后被销毁->无效)** |
 | 指针         | 返回有效指针(**动态分配/静态全局变量**),**避免局部变量指针**(返回后被销毁->无效) |
 | 智能指针     | `std::unique_ptr`或`std::shared_ptr`                         |
-| **注意事项** |                                                              |
-|              | **避免返回函数内局部变量的指针/引用**, 离开函数作用域后, 被销毁, **导致野指针/悬挂引用** |
+|              |                                                              |
+| **注意事项** | **避免返回函数内局部变量的指针/引用**, 离开函数作用域后, 被销毁, **导致野指针/悬挂引用** |
 |              | 可以返回**静态变量或全局变量的引用/指针**,一直存在.          |
 |              | 返回动态分配的指针时, 注意释放内存,防止内存泄漏.             |
 
-#### 返回值优化（RVO）
+#### 返回值优化(RVO)
 
 - RVO是一种编译器优化技术，在函数返回时直接在调用者的上下文中构造返回值对象，而不是先在被调用函数的栈帧中构造临时对象再拷贝到调用者的上下文中。这避免了临时对象的拷贝和销毁，使得返回的对象在函数返回后依然有效。
 
-#### 移动语义（Move Semantics）
+#### 移动语义(Move Semantics)
 
-- C++11引入了右值引用（rvalue references）和移动语义，使得可以高效地转移临时对象的资源，而不是拷贝它们。当函数返回临时对象时，编译器可以调用对象的移动构造函数，将资源转移到返回值中。
+- C++11引入了右值引用(rvalue references)和移动语义，使得可以高效地转移临时对象的资源，而不是拷贝它们。当函数返回临时对象时，编译器可以调用对象的移动构造函数，将资源转移到返回值中。
 
 ### 递归函数
 
@@ -1572,11 +1565,11 @@ int main() {
 
 ### 访问修饰符
 
-|           | 说明                         |
-| --------- | ---------------------------- |
-| public    | 公开，无访问限制             |
-| protected | 只在类内部和派生类中可访问   |
-| private   | 只在类内部和**友元**函数访问 |
+|           | 说明                                    |
+| --------- | --------------------------------------- |
+| public    | 公开，无访问限制                        |
+| protected | 只在类内部, 派生类中, 友元函数/类可访问 |
+| private   | 只在类内部和**友元**函数/类访问         |
 
 代码示例：
 
@@ -1788,7 +1781,7 @@ public:
         std::cout << "Derived virtualFunc" << std::endl;
     }
 
-    void overloadedFunc(int x) { // 重载（基类同名函数被隐藏）
+    void overloadedFunc(int x) { // 重载(基类同名函数被隐藏)
         std::cout << "Derived overloadedFunc(int): " << x << std::endl;
     }
 };
@@ -1801,7 +1794,7 @@ int main() {
     derived.func(); // 调用 Derived::func()，隐藏 Base::func(int)
 
     base.virtualFunc(); // 调用 Base::virtualFunc
-    derived.virtualFunc(); // 调用 Derived::virtualFunc（覆盖）
+    derived.virtualFunc(); // 调用 Derived::virtualFunc(覆盖)
 
     base.overloadedFunc(10); // 调用 Base::overloadedFunc(int)
     base.overloadedFunc(3.14); // 调用 Base::overloadedFunc(double)
@@ -1886,19 +1879,22 @@ int main() {
 | **菱形继承** | 在多继承中, 当一个类从多个途径继承自同一基类时, 该类存在多个基类实例, |
 |              | 二义性: 导致编译器无法确定该使用哪一个基类的成员.            |
 |              | 浪费存储空间:                                                |
-| **虚基类**   | 即继承时, 加上virtual,                                       |
-| **虚基指针** | Virtual Base Class Pointer, 简称 VBP, 用于指向虚基类实例的指针. |
-|              | 每个虚继承的派生类**对象**中都包含**一个/多个**虚基类指针,   |
-|              | 确保每个虚基类只有一个实例.                                  |
-| **虚基类表** | Virtual Base Class Table，简称 VBT,用于存储虚基类指针的地址表. |
+| **虚基类**   | 继承时加virtual, 确保菱形继承中, 只有一份虚基类的实例.       |
+| **虚基指针** | Virtual Base Pointer, vbptr,  也叫**虚基类指针**             |
+|              | 每个虚继承的派生类**对象**都包含一个虚基指针, 指向虚基类表.  |
+| **虚基类表** | Virtual Base Table，vbtbl                                    |
+|              | 存储虚基类的**偏移量**, 帮助定位虚基类的位置                 |
+|              | 属于类级别, 通过虚基指针进行引用.                            |
+| **偏移量**   | 虚基类表中的偏移量: 指虚基类(A) 在派生类对象中的相对位置     |
+|              | 偏移量的基准:  相对于派生类对象(D)的起始地址                 |
 |              |                                                              |
+| **构造过程** | ABCD的具体构造过程                                           |
+| 构造D        | 分配内存, D类对象内存,  B/C/A的实例区域以及虚基指针/虚函数指针. |
+| 构造A        | 通过B和C的虚基指针查到A的偏移量, 确定A在D类对象内存中的位置. 调用A构造函数, 构造A |
+| 构造B+C      | 调用B+C类构造函数, 通过B/C的虚基指针指向虚基类表, **确保A已构造** |
+| 构造D        | 调用D的构造函数, 初始化D类的成员变量.                        |
 |              |                                                              |
-|              |                                                              |
-|              |                                                              |
-|              |                                                              |
-|              |                                                              |
-
-
+|              | 虚基类不改变访问控制属性.                                    |
 
 代码示例：
 
@@ -1907,121 +1903,69 @@ int main() {
 
 class A {
 public:
-    int aValue;
-    A() : aValue(0) { std::cout << "A's constructor" << std::endl; }
-    ~A() { std::cout << "A's destructor" << std::endl; }
-    void showA() { std::cout << "A's value: " << aValue << std::endl; }
+    int a;
+    A() : a(0) { std::cout << "A constructed\n"; }
+    virtual void foo() { std::cout << "A::foo\n"; }
 };
 
 class B : virtual public A {
 public:
-    int bValue;
-    B() : bValue(1) { std::cout << "B's constructor" << std::endl; }
-    ~B() { std::cout << "B's destructor" << std::endl; }
+    int b;
+    B() : b(1) { std::cout << "B constructed\n"; }
+    virtual void foo() { std::cout << "B::foo\n"; }
 };
 
 class C : virtual public A {
 public:
-    int cValue;
-    C() : cValue(2) { std::cout << "C's constructor" << std::endl; }
-    ~C() { std::cout << "C's destructor" << std::endl; }
+    int c;
+    C() : c(2) { std::cout << "C constructed\n"; }
+    virtual void foo() { std::cout << "C::foo\n"; }
 };
 
 class D : public B, public C {
 public:
-    int dValue;
-    D() : dValue(3) { std::cout << "D's constructor" << std::endl; }
-    ~D() { std::cout << "D's destructor" << std::endl; }
+    int d;
+    D() : d(3) { std::cout << "D constructed\n"; }
+    virtual void foo() { std::cout << "D::foo\n"; }
 };
 
 int main() {
-    D d;
-    d.aValue = 10;
-    d.bValue = 20;
-    d.cValue = 30;
-    d.dValue = 40;
-
-    d.showA();
-    std::cout << "B's value: " << d.bValue << std::endl;
-    std::cout << "C's value: " << d.cValue << std::endl;
-    std::cout << "D's value: " << d.dValue << std::endl;
-
+    D obj;
+    obj.foo();  // 调用D::foo
     return 0;
-
+}
 }
 ```
 
 如上代码中ABCD四各类的内存模型如下
 
 ```
-//A 类的内存模型, 不涉及虚基类表
-+---------------------------+
-| A object                  |
-+---------------------------+
-| A::aValue                 | // A class member
-+---------------------------+
+//D类的内存布局
++---------------------+  <-- D object start
+| vbptr for B         | --> 指向B类的虚基类表
++---------------------+
+| vptr for B          | --> 指向B类的虚函数表
++---------------------+
+|   b                 | --> B类的成员变量
++---------------------+
+| vbptr for C         | --> 指向C类的虚基类表
++---------------------+
+| vptr for C          | --> 指向C类的虚函数表
++---------------------+
+|   c (from C)        | --> C类的成员变量
++---------------------+
+|   a (from A)        | --> A类实例
++---------------------+
+|   d (from D)        | --> D类的成员变量
++---------------------+
 
-//B 类的内存模型
-+---------------------------+
-| B object                  |
-+---------------------------+
-| B::bValue                 | // B class member
-+---------------------------+
-| VBP for A                 | // Virtual Base Pointer for A
-+---------------------------+
-| A subobject               |
-|   +---------------------+ |
-|   | A::aValue           | | // A class member
-|   +---------------------+ |
-+---------------------------+
+//B's vbtable:
+[ Offset to A from D ]
 
-//C 类的内存模型
-+---------------------------+
-| C object                  |
-+---------------------------+
-| C::cValue                 | // C class member
-+---------------------------+
-| VBP for A                 | // Virtual Base Pointer for A
-+---------------------------+
-| A subobject               |
-|   +---------------------+ |
-|   | A::aValue           | | // A class member
-|   +---------------------+ |
-+---------------------------+
-
-//D 类的内存模型
-+---------------------------+
-| D object                  |
-+---------------------------+
-| D::dValue                 | // D class member
-+---------------------------+
-| VBP for A (from B)        | // Virtual Base Pointer for A via B
-+---------------------------+
-| VBP for A (from C)        | // Virtual Base Pointer for A via C
-+---------------------------+
-| B subobject               |
-|   +---------------------+ |
-|   | B::bValue           | | // B class member
-|   +---------------------+ |
-|   | VBP for A           | | // Virtual Base Pointer for A
-|   +---------------------+ |
-+---------------------------+
-| C subobject               |
-|   +---------------------+ |
-|   | C::cValue           | | // C class member
-|   +---------------------+ |
-|   | VBP for A           | | // Virtual Base Pointer for A
-|   +---------------------+ |
-+---------------------------+
-| A subobject               |
-|   +---------------------+ |
-|   | A::aValue           | | // A class member
-|   +---------------------+ |
-+---------------------------+
+//C's vbtable:
+[ Offset to A from D ]
 
 ```
-
-
 
 ## 3.3 virtual
 
@@ -2030,14 +1974,14 @@ int main() {
 | 概念     | 说明                                                         |
 | -------- | ------------------------------------------------------------ |
 | 虚函数   | virtual成员函数,允许派生类重写, 可通过基类指针/引用调用派生类对象 |
-| 纯虚函数 | virtual和=0的成员函数, 基类只声明不实现, 派生类必须提供具体实现. |
+| 纯虚函数 | virtual和=0的成员函数, 基类只声明不定义, 派生类必须提供具体实现. |
 | 抽象类   | 含有纯虚函数的类, 称为抽象类, 不能实例化.                    |
 |          |                                                              |
 |          | **虚函数使用注意事项**                                       |
-| 1        | 派生类重写虚函数时, 加上virtual和override,编译编译器检查     |
-| 2        | 避免隐藏虚函数, 确保为重写,而不是隐藏                        |
-| 3        | 析构函数声明为虚函数, 基类指针/引用删除派生类对象时, 调动基类析构,防止资源泄漏 |
-| 4        | 虚函数不能删除/修改/中间插入, 防止虚表错乱, 函数调用出错.    |
+| 1        | 派生类重写虚函数时, 加上virtual和override, 便于编译器检查    |
+| 2        | 避免隐藏虚函数, 确保为重写(同名+同参数列表),而不是隐藏       |
+| 3        | 虚函数不能删除/修改/中间插入, 防止虚表错乱, 函数调用出错.    |
+| 4        | 析构函数声明为虚函数, 基类指针/引用删除派生类对象时, 调动基类析构,防止资源泄漏 |
 | 5        | 构造函数不能为虚函数.                                        |
 |          |                                                              |
 |          | **构造函数不能为虚函数的原因**                               |
@@ -2045,27 +1989,316 @@ int main() {
 | 2        | 创建对象时, 对象未实例化完成, 内存空间不存在, 无法找到虚表.  |
 
 
+### 虚指针和虚表
+
+|          | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 虚指针   | vptr, 每个包含虚函数**类对象**都有一个虚指针, 指向虚函数表.  |
+| 虚函数表 | vtable, 每个包含虚函数的**类**都有一个虚函数表, 表中存储虚函数指针. |
+|          |                                                              |
+| **本质** | 根据指针对象的虚指针, 找到虚表, 再从虚表中找到虚函数指针, 最后调用对应的虚函数 |
+|          | 虚指针->虚表->虚函数->调用.                                  |
+
+代码示例：
+
+```
+#include <iostream>
+
+class Base {
+public:
+    virtual void foo() { std::cout << "Base::foo\n"; }
+    virtual void bar() { std::cout << "Base::bar\n"; }
+    virtual ~Base() {} // 添加虚析构函数以正确释放派生类对象
+};
+
+class Derived : public Base {
+public:
+    virtual void foo() override { std::cout << "Derived::foo\n"; }
+    virtual void bar() override { std::cout << "Derived::bar\n"; }
+};
+
+int main() {
+    Base* obj = new Derived();
+    obj->foo(); // 调用 Derived::foo
+    obj->bar(); // 调用 Derived::bar
+    delete obj; // 调用 Derived 和 Base 的析构函数
+    return 0;
+}
+```
+
+如上示例代码的详细说明如下: 
+
+|                | 构造过程                                                     |
+| -------------- | ------------------------------------------------------------ |
+| **对象创建**   | 创建`Derived`类对象时, 插入 vptr(/初始化指向虚函数).         |
+| **虚表初始化** | `Base` 类和 `Derived` 类各自有一个虚函数表                   |
+|                | `Base` 类的虚函数表包含指向 `Base::foo` 和 `Base::bar` 的指针 |
+|                | `Derived` 类的虚函数表包含指向 `Derived::foo` 和 `Derived::bar` 的指针 |
+|                |                                                              |
+|                | **虚函数调用过程 : 虚指针->虚表->虚函数->调用**              |
+| 1              | 虚指针:  `Base*` 类型的 `obj` , 实际上指向 `Derived`, 找到 `Derived.vptr` |
+| 2              | 虚表:  通过`Derived.vptr`找到`Derived.vtable`                |
+| 3              | 虚函数: 从 `Derived.vtable` 中找到 `Derived::foo`的地址, 并调用 |
+|                |                                                              |
+|                | **Base 类的虚表 (vtable)**                                   |
+| **Index**      | **Function Pointer**                                         |
+| 0              | &Base::foo                                                   |
+| 1              | &Base::bar                                                   |
+| 2              | &Base::~Base                                                 |
+|                |                                                              |
+|                | **Derived 类的虚表 (vtable)**                                |
+| **Index**      | **Function Pointer**                                         |
+| 0              | &Derived::foo                                                |
+| 1              | &Derived::bar                                                |
+| 2              | &Derived::~Derived                                           |
+
+**Derived 对象内存布局**
+
+```
++------------------------+  <-- Derived object start
+| vptr (指向Derived vtable) |
++------------------------+
+| Base 类的成员           |
++------------------------+
+| Derived 类的成员        |
++------------------------+
+```
 
 
 
+## 3.4 关联
 
-### 虚函数指针和虚表
+### this
 
+|      | this指针说明                      |
+| ---- | --------------------------------- |
+| 1    | 隐式指针, 指向调用成员函数的对象. |
+| 2    | 只能在非静态成员函数中使用.       |
 
+### const与class
 
+| const    | 说明                                                      |
+| -------- | --------------------------------------------------------- |
+| 变量     | 又称const常量, 必须初始化, 且不可修改.                    |
+| 传参     | 确保入参不被函数修改.                                     |
+| 返回值   | 表示返回值不可修改, 放在函数定义最开头(返回值类型之前)    |
+| 成员变量 | 必须在构造函数初始化列表中初始化, 之后不可修改.           |
+| 成员函数 | 不修改成员变量的值, 即函数执行过程中, 对象的状态不会改变. |
+|          |                                                           |
+|          | **const成员函数说明**                                     |
+| 1        | 不修改成员变量的值, mutable成员变量除外.                  |
+| 2        | 只能调用const成员函数.                                    |
+| 3        | 写法: const放在参数列表最后.                              |
+| 4        | 声明和定义要一致,  即都加const                            |
 
+示例代码
 
+```
+#include <iostream>
 
+class MyClass {
+private:
+    int value;
+    mutable int mutableValue;
 
+public:
+    MyClass(int val) : value(val), mutableValue(0) {}
 
+    int getValue() const {
+        return value; // 读取成员变量的值
+    }
 
+    void setValue(int val) {
+        value = val; // 修改成员变量的值
+    }
 
+    void modifyMutableValue() const {
+        mutableValue++; // 允许修改 mutable 变量
+    }
 
+    void display() const {
+        std::cout << "Value: " << value << ", Mutable Value: " << mutableValue << std::endl;
+    }
+};
 
+int main() {
+    MyClass obj(10);
 
+    obj.display();
+    obj.setValue(20); // 修改成员变量的值
+    obj.display();
 
+    obj.modifyMutableValue(); // 修改 mutable 变量
+    obj.display();
 
+    const MyClass constObj(30);
+    constObj.display();
+    constObj.modifyMutableValue(); // 修改 mutable 变量
+    constObj.display();
 
+    // constObj.setValue(40); // 错误：不能在 const 对象上调用非 const 成员函数
+
+    return 0;
+}
+```
+
+### static与class
+
+|                  | 说明                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| **static成员**   | 访问属性依然存在, 和普通成员一样.                            |
+| **静态成员变量** | 属于类, 所有对象共享一份, 类外定义.                          |
+| **静态成员函数** | 属于类, 所有对象共享, 没有`this`指针, 可直接调用(通过类名::func方式) |
+|                  | 不能访问非**非静态成员变量** 和 **非静态成员函数**           |
+| **静态局部变量** | 作用域仅限于函数内部, 生命周期贯穿程序整个运行期间.          |
+| **静态类**       | 无直接的静态类概念                                           |
+|                  | 通过将构造+析构+拷贝构造 声明为 `delete`, 并将所有成员声明为 `static`来模拟. |
+|                  | 很少使用, 适合纯函数和工具函数.                              |
+
+示例代码:
+
+```
+#include <iostream>
+
+class MyClass {
+public:
+    // 公有 static 成员变量
+    static int publicStaticVar;
+    
+    // 公有 static 成员函数
+    static void publicStaticFunc() {
+        std::cout << "Public static function called." << std::endl;
+        std::cout << "Accessing publicStaticVar: " << publicStaticVar << std::endl;
+    }
+
+protected:
+    // 保护 static 成员变量
+    static int protectedStaticVar;
+
+    // 保护 static 成员函数
+    static void protectedStaticFunc() {
+        std::cout << "Protected static function called." << std::endl;
+    }
+
+private:
+    // 私有 static 成员变量
+    static int privateStaticVar;
+
+    // 私有 static 成员函数
+    static void privateStaticFunc() {
+        std::cout << "Private static function called." << std::endl;
+    }
+
+public:
+    // 公有成员函数，用于访问私有 static 成员
+    static void accessPrivateStatic() {
+        // 访问私有 static 成员变量和成员函数
+        privateStaticVar = 10;
+        privateStaticFunc();
+        std::cout << "Private static variable: " << privateStaticVar << std::endl;
+    }
+};
+
+// Static 成员变量的定义和初始化
+int MyClass::publicStaticVar = 1;
+int MyClass::protectedStaticVar = 2;
+int MyClass::privateStaticVar = 3;
+
+int main() {
+    // 访问公有 static 成员变量
+    MyClass::publicStaticVar = 5;
+    std::cout << "Public static variable: " << MyClass::publicStaticVar << std::endl;
+
+    // 调用公有 static 成员函数
+    MyClass::publicStaticFunc();
+
+    // 尝试直接访问保护 static 成员变量（会出错）
+    // MyClass::protectedStaticVar = 6; // Error: protected member
+    // MyClass::protectedStaticFunc();  // Error: protected member
+
+    // 尝试直接访问私有 static 成员变量（会出错）
+    // MyClass::privateStaticVar = 7;   // Error: private member
+    // MyClass::privateStaticFunc();    // Error: private member
+
+    // 通过公有成员函数访问私有 static 成员
+    MyClass::accessPrivateStatic();
+
+    return 0;
+}
+```
+
+## 3.5 转换
+
+|          | class的转换                                                  |
+| -------- | ------------------------------------------------------------ |
+| 自动转换 | 编译器自动完成, 通常通过构造/类型转换符来实现.               |
+| 强制转换 | 程序员显式指定, static_cast/dynamic_cast/const_cast/reinterpret_cast |
+
+自动转换代码示例:
+
+```
+#include <iostream>
+
+class MyClass {
+public:
+    MyClass(int value) : value(value) {
+        std::cout << "MyClass(int) constructor called\n";
+    }
+
+    operator int() const {
+        std::cout << "operator int() called\n";
+        return value;
+    }
+
+private:
+    int value;
+};
+
+int main() {
+    MyClass obj(42);
+
+    // 自动转换：MyClass -> int
+    int intValue = obj;  // 调用类型转换运算符
+    std::cout << "intValue: " << intValue << std::endl;
+
+    // 自动转换：int -> MyClass
+    MyClass anotherObj = 100;  // 调用构造函数
+    std::cout << "anotherObj: " << int(anotherObj) << std::endl;
+
+    return 0;
+}
+```
+
+强制转换代码示例:
+
+```
+#include <iostream>
+
+class Base {
+public:
+    virtual void show() {
+        std::cout << "Base show()" << std::endl;
+    }
+};
+
+class Derived : public Base {
+public:
+    void show() override {
+        std::cout << "Derived show()" << std::endl;
+    }
+};
+
+int main() {
+    Base* basePtr = new Derived();
+
+    // 强制转换：Base* -> Derived*
+    Derived* derivedPtr = static_cast<Derived*>(basePtr);
+    derivedPtr->show();  // 调用 Derived 的 show()
+
+    delete basePtr;
+    return 0;
+}
+```
 
 # 4 代码复用
 
