@@ -2300,193 +2300,170 @@ int main() {
 }
 ```
 
-# 4 代码复用
+# 4 重载
 
-
-
-## 4.1 重载
-
-重载: 同一个作用域, 函数名相同, 参数列表不同的函数, 返回类型无关.
-
-### 4.1.1 函数重载
-
-函数重载: 同一个作用域, 函数名相同, 参数列表不同得函数.  
-
-参数列表: 包括类型, 个数, 顺序.
-
-代码示例:
-
-```
-#include <iostream>  
-#include <string>  
-  
-// 函数重载示例：print函数  
-  
-// 第一个版本，用于打印整数  
-void print(int value) {  
-    std::cout << "Printing int: " << value << std::endl;  
-}  
-  
-// 第二个版本，用于打印浮点数  
-void print(float value) {  
-    std::cout << "Printing float: " << value << std::endl;  
-}  
-  
-// 第三个版本，用于打印双精度浮点数  
-void print(double value) {  
-    std::cout << "Printing double: " << value << std::endl;  
-}  
-  
-// 第四个版本，用于打印字符串  
-void print(const std::string& value) {  
-    std::cout << "Printing string: " << value << std::endl;  
-}  
-  
-// 第五个版本，用于打印字符  
-void print(char value) {  
-    std::cout << "Printing char: " << value << std::endl;  
-}  
-  
-int main() {  
-    // 调用不同版本的print函数  
-    print(42);           // 调用第一个版本，打印整数  
-    print(3.14f);        // 调用第二个版本，打印浮点数  
-    print(2.71828);      // 调用第三个版本，打印双精度浮点数(注意这里没有'f'后缀，所以是double类型)  
-    print("Hello, World!"); // 调用第四个版本，打印字符串  
-    print('A');          // 调用第五个版本，打印字符  
-  
-    return 0;  
-}
-```
-
-输出:
-
-```
-Printing int: 42  
-Printing float: 3.14  
-Printing double: 2.71828  
-Printing string: Hello, World!  
-Printing char: A
-```
-
-### 4.1.2 运算符重载
-
-操作符重载格式:
-
-```
-返回值 operator操作符(参数)
-```
-
-示例:
-
-```
-#include <iostream>  
-  
-// 自定义复数类  
-class Complex {  
-public:  
-    double real;  
-    double imag;  
-  
-    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}  
-  
-    // 重载+操作符  
-    Complex operator+(const Complex& other) const {  
-        return Complex(real + other.real, imag + other.imag);  
-    }  
-  
-    // 输出复数  
-    void print() const {  
-        std::cout << "(" << real << ", " << imag << ")" << std::endl;  
-    }  
-};  
-  
-int main() {  
-    Complex c1(1.0, 2.0);  
-    Complex c2(3.0, 4.0);  
-    Complex sum = c1 + c2; // 使用重载的+操作符  
-    sum.print(); // 输出结果  
-    return 0;  
-}
-```
-
-**不可重载操作符**：
-
-|            | 不可重载操作符说明 |
-| ---------- | ------------------ |
-| **.**      | 成员访问运算符     |
-| **->**     | 成员指针访问运算符 |
-| **::**     | 域运算符           |
-| **sizeof** | 长度运算符         |
-| **?:**     | 条件运算符         |
-| **#**      | 预处理符号         |
-| case       | 4个强制类型转换符  |
-|            |                    |
-
-下面是可重载的运算符列表：
-
-| 双目算术运算符 | + (加)，-(减)，*(乘)，/(除)，% (取模)                        |
+|                | 说明                                                         |
 | -------------- | ------------------------------------------------------------ |
-| 关系运算符     | ==(等于)，!= (不等于)，< (小于)，> (大于)，<=(小于等于)，>=(大于等于) |
-| 逻辑运算符     | \|\|(逻辑或)，&&(逻辑与)，!(逻辑非)                          |
-| 单目运算符     | + (正)，-(负)，*(指针)，&(取地址)                            |
-| 自增自减运算符 | ++(自增)，--(自减)                                           |
-| 位运算符       | \| (按位或)，& (按位与)，~(按位取反)，^(按位异或),，<< (左移)，>>(右移) |
-| 赋值运算符     | =, +=, -=, *=, /= , % = , &=, \|=, ^=, <<=, >>=              |
-| 空间申请与释放 | new, delete, new[ ] , delete[]                               |
-| 其他运算符     | **()**(函数调用)，**->**(成员访问)，**,**(逗号)，**[]**(下标) |
+| 重载           | 同一作用域, 同名+不同参数列表(类型/个数/顺序)的函数/运算符, 返回值类型无关 |
+| 函数重载       | 可重载为普通函数/成员函数                                    |
+| 运算符重载     | 可重载为普通函数/成员函数                                    |
+| **链式调用**   | 当一个运算符被重载时, 其返回值应当使能够参与其他运算符操作的对象/引用. |
+|                | 即通常放回类对象本身/引用.                                   |
+|                | 用途: 一行代码中, 连续进行多次操作, 无需中间变量.            |
+|                |                                                              |
+| **运算符重载** | **代码格式**: 返回值 operator操作符(参数)                    |
+|                |                                                              |
+|                | **不可重载操作符**                                           |
+| **::**         | 域运算符                                                     |
+| .              | 成员访问运算符                                               |
+| ->             | 成员指针访问运算符                                           |
+| ?:             | 条件运算符                                                   |
+| sizeof         | 长度运算符                                                   |
+| typeid         | 类型识别运算符                                               |
+| #              | 预处理符号                                                   |
+| case           | 强制类型转换符, `static_cast`/`dynamic_cast`/`const_cast` /`reinterpret_cast` |
+|                |                                                              |
+|                | **操作符重载限制**                                           |
+| 1              | 至少有一个操作数是用户自定义的类型, 为防止改变标准类型的原有语义. |
+| 2              | 不能违反操作符原有的语法规则, 即操作数个数/语法结构/语义     |
+| 3              | 不能改变操作符的优先级和结合律                               |
+| 4              | 不能创建新的操作符                                           |
+| 5              | 部分操作符不能被重载.                                        |
+| 6              | 部分操作符只能通过**成员函数**重载. 如 =, []/, (), ->,       |
+| 7              | 部分操作符只能通过**非成员函数**重载, 如 <</>>               |
+| 8              | 重载操作符的参数不能全为默认参数                             |
+| 9              | 返回值类型的限制: 通常返回做左操作数的引用, 以便支持**链式调用** |
+| 10             | 操作符函数不能继承, 可重新定义.                              |
+| 11             | 避免二义性, 防止出现多个操作符重置版本, 导致编译错误.        |
+| 12             | new 和 delete, 必须重载为全局函数/类成员函数, 不能重载为局部函数/友元函数. |
+| 13             | 访问权限: 操作符重载为非成员函数时, 如需访问类私有成员, 需要申明为友元. |
+|                |                                                              |
+| **运算符重载** | 只能通过**成员函数**                                         |
+| =              | 赋值                                                         |
+| []             | 数组                                                         |
+| ()             | 调用                                                         |
+| ->             | 指针访问                                                     |
+|                |                                                              |
+| **运算符重载** | 只能通过**非成员函数**                                       |
+| >>             | 输入运算符                                                   |
+| <<             | 输出运算符                                                   |
+|                | 原因: 左操作数必须是标准输入输出流, 而不是类的实例, 所以只能通过非成员函数重载. |
+|                |                                                              |
+| **运算符重载** | **运算符重载其他注意事项**                                   |
+| 一致性         | 重载运算符的行为与预期一致, 避免产生混淆.                    |
+| 返回值类型     | 返回值类型应支持链式调用. 如 `operator+=` 通常返回`*this`的引用 |
+|                | 对应返回新对象的运算符`operator+`,应返回一个临时对象.        |
+| 友元/成员      | 某些运算符通常定义为友元函数, 以便访问私有成员.              |
+|                | 一元运算符通常定义为成员函数, 二元运算符通常定义为友元/成员函数. |
 
-### 4.1.3 重载限制
 
-C++中的操作符重载有一些限制，这些限制旨在保持语言的一致性和防止滥用。以下是一些主要的限制：
+## 函数重载
 
-1. **至少有一个操作数是用户定义的类型**：
-   重载的操作符必须至少有一个操作数是用户自定义类型(类类型、结构体类型或枚举类型)。这是为了防止用户为标准类型重载操作符，从而改变它们原有的语义。
+```
+#include <iostream>
 
-2. **不能违反操作符原有的语法规则**：
-   重载的操作符必须保持其原有的操作数个数、语法结构和基本语义。例如，不能将二元操作符重载为单元操作符，也不能改变操作符的优先级或结合性。
+// 前向声明类 Calculator
+class Calculator;
 
-3. **不能创建新的操作符**：
-   不能定义新的操作符符号。只能重载C++语言中已有的操作符。例如，不能定义一个新的`operator@`。
+// 非成员函数重载
+int add(int a, int b) {
+    return a + b;
+}
 
-4. **部分操作符不能被重载**：
-   有一些操作符在C++中是不能被重载的，包括：
+double add(double a, double b) {
+    return a + b;
+}
 
-   - `sizeof`：获取对象或类型的大小。
-   - `.*`：成员指针访问。
-   - `::`：域解析操作符。
-   - `?:`：条件操作符(三元操作符)。
-   - 四个类型转换操作符：`const_cast`、`dynamic_cast`、`reinterpret_cast` 和 `static_cast`。
+class Calculator {
+public:
+    // 成员函数重载
+    int add(int a, int b) {
+        return a + b;
+    }
 
-5. **部分操作符只能通过成员函数重载**：
-   一些操作符只能通过类的成员函数来重载。这些操作符通常与类的特定对象紧密相关，包括：
+    double add(double a, double b) {
+        return a + b;
+    }
 
-   - 赋值操作符 `=`
-   - 下标操作符 `[]`
-   - 函数调用操作符 `()`
-   - 成员访问箭头操作符 `->`
+    // 显示结果
+    void display() {
+        std::cout << "Using member function add(int, int): " << add(3, 4) << std::endl;
+        std::cout << "Using member function add(double, double): " << add(3.5, 4.5) << std::endl;
+    }
+};
 
-   这些操作符通常需要访问类的私有或受保护成员，因此它们被限制为只能通过成员函数进行重载。
+int main() {
+    Calculator calc;
 
-6. **不能改变操作符的优先级和结合性**：
-   重载的操作符继承其在语言中的原有优先级和结合性。这意味着，例如，重载的`+`操作符仍然保持其左结合性，并且优先级与原始的加法操作符相同。
+    // 使用成员函数重载
+    calc.display();
 
-7. **重载操作符的参数不能全为默认参数**：
-   这会导致编译器在解析表达式时产生歧义，因为它无法确定应该使用哪个重载版本。
+    // 使用非成员函数重载
+    std::cout << "Using non-member function add(int, int): " << add(10, 20) << std::endl;
+    std::cout << "Using non-member function add(double, double): " << add(10.5, 20.5) << std::endl;
 
-8. **返回值类型的限制**：
-   虽然大多数操作符的返回值类型可以由用户自定义，但有一些约定和限制。例如，赋值操作符通常返回左操作数的引用，以便支持链式赋值。
+    return 0;
+}
+```
 
-9. **二义性的避免**：
-   当存在多个可能的操作符重载版本时，编译器必须能够唯一确定应该使用哪个版本。如果编译器无法确定，则会产生编译错误。
+## 运算符重载
 
-10. **new和delete**：
+```
+#include <iostream>
 
-   必须重载为类成员函数和全局函数，不能重载为局部函数和类友元函数。
+class Complex {
+private:
+    double real;
+    double imag;
 
-在重载操作符时，应仔细考虑这些限制，以确保代码的清晰性、可读性和正确性。
+public:
+    // 构造函数
+    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
 
-## 4.2 友元
+    // 重载加法运算符，作为成员函数
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real, imag + other.imag);
+    }
+
+    // 友元函数，用于重载输出运算符
+    friend std::ostream& operator<<(std::ostream& os, const Complex& c);
+
+    // 友元函数，用于重载输入运算符
+    friend std::istream& operator>>(std::istream& is, Complex& c);
+};
+
+// 重载输出运算符，作为非成员函数
+std::ostream& operator<<(std::ostream& os, const Complex& c) {
+    os << "(" << c.real << ", " << c.imag << ")";
+    return os;
+}
+
+// 重载输入运算符，作为非成员函数
+std::istream& operator>>(std::istream& is, Complex& c) {
+    is >> c.real >> c.imag;
+    return is;
+}
+
+int main() {
+    Complex c1(3.0, 4.0);
+    Complex c2(1.0, 2.0);
+    Complex c3;
+
+    std::cout << "Enter a complex number (real and imaginary parts): ";
+    std::cin >> c3;
+
+    Complex c4 = c1 + c2;  // 使用重载的加法运算符
+
+    std::cout << "c1: " << c1 << std::endl;
+    std::cout << "c2: " << c2 << std::endl;
+    std::cout << "c3: " << c3 << std::endl;
+    std::cout << "c1 + c2: " << c4 << std::endl;
+
+    return 0;
+}
+```
+
+# 5.友元
 
 在C++中，`friend`关键字用于声明友元函数或友元类。当一个函数或一个类被声明为另一个类的友元时，它可以访问该类的私有(private)和保护(protected)成员。这是一种突破数据封装和隐藏的方式，应谨慎使用。
 
@@ -2690,9 +2667,7 @@ int main() {
 }
 ```
 
-
-
-## 4.3 模板
+# 6.模板
 
 模板编程是一种编程范式，允许编写类型无关的代码。
 
