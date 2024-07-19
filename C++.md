@@ -2465,205 +2465,117 @@ int main() {
 
 # 5.友元
 
-在C++中，`friend`关键字用于声明友元函数或友元类。当一个函数或一个类被声明为另一个类的友元时，它可以访问该类的私有(private)和保护(protected)成员。这是一种突破数据封装和隐藏的方式，应谨慎使用。
+|                | 说明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| 友元函数       | 可访问类私有/保护成员的函数 在类声明时+friend.               |
+| 友元类         | 可访问类私有/保护成员的类, 声明时+`friend class`             |
+| **互为友元类** | 两个类互为友元类                                             |
+|                |                                                              |
+| **使用场景**   | 操作符重载**, **实现回调机制**, **避免过多的getter/setter方法 |
+|                |                                                              |
+|                | **使用注意事项**                                             |
+| **破坏封装**   | 友元函数/友元类会破坏类的封装性, 暴露实现细节.               |
+| **紧耦合**     | 增加耦合度, 导致维护/扩展变得复杂.                           |
+| **谨慎使用**   | 谨慎使用, 尽量避免.                                          |
 
-**友元用法**：
-
-1. 当两个类需要紧密协作，并且要求其中一个类能够访问另一个类的私有或受保护成员时。
-2. 重载操作符时，特别是当操作符需要访问类的私有或受保护成员时。
-
-### 4.2.1 友元函数
-
-友元函数分为两种：
-
-- 友元函数， friend void ClassB::func(ClassA& a);
-- 友元成员函数，
-
-友元函数的主要用途：
-
-1. **重载操作符**：当需要为类类型的对象重载操作符时，友元函数特别有用。例如，重载`<<`操作符以便与`std::ostream`一起使用，或者重载比较操作符如`==`和`<`等。这些操作符通常需要访问类的私有或受保护成员，而友元函数能够直接访问这些成员。
-2. **提供对类私有成员的访问**：有时，出于某种原因(如调试、测试或特殊的实用程序函数)，你可能想要提供一个能够直接访问类私有成员的函数。虽然这通常被认为是一种破坏封装性的做法，但在某些情况下可能是必要的。
-3. **实现回调机制**：在某些设计模式中，可能需要将一个类的私有数据传递给另一个类的方法进行处理。通过将另一个类的方法声明为友元，可以直接访问私有数据而无需通过类的公共接口。
-4. **增强两个类之间的协作**：当两个类需要紧密协作时，有时将一个类的方法声明为另一个类的友元可以更高效地共享信息。这样做可以减少不必要的公共接口方法，并且可以直接在两个类之间传递数据。
-5. **保持接口的一致性**：在某些情况下，将某些函数作为友元而不是类的成员函数，可以帮助保持类的接口更加一致和简洁。这样做可以避免在类的公共接口中暴露过多的实现细节。
-
-**友元成员函数**：
+### 友元函数与友元类
 
 ```
-class ClassB; // 前向声明  
-  
-class ClassA {  
-    friend void ClassB::accessPrivateMember(ClassA& a); // 声明ClassB的成员函数为友元  
-private:  
-    int secret = 42;  
-};  
-  
-class ClassB {  
-public:  
-    void accessPrivateMember(ClassA& a); // 此函数将能够访问ClassA的私有成员  
-};  
-  
-void ClassB::accessPrivateMember(ClassA& a) {  
-    std::cout << "ClassA's secret is: " << a.secret << std::endl; // 直接访问ClassA的私有成员  
-}  
-  
-int main() {  
-    ClassA a;  
-    ClassB b;  
-    b.accessPrivateMember(a); // 输出：ClassA's secret is: 42  
-    return 0;  
+#include <iostream>
+#include <string>
+
+// 前向声明类 B
+class B;
+
+class A {
+private:
+    int value;
+public:
+    A(int v) : value(v) {}
+
+    // 声明友元函数
+    friend void showValue(const A& a);
+
+    // 声明友元类
+    friend class B;
+};
+
+// 友元函数定义
+void showValue(const A& a) {
+    std::cout << "Value from friend function: " << a.value << std::endl;
+}
+
+class B {
+public:
+    void showValueFromA(const A& a) {
+        std::cout << "Value from friend class: " << a.value << std::endl;
+    }
+};
+
+int main() {
+    A a(42);
+    B b;
+
+    // 使用友元函数
+    showValue(a);
+
+    // 使用友元类
+    b.showValueFromA(a);
+
+    return 0;
 }
 ```
 
-**友元函数**：
+### 互为友元
 
 ```
-#include <iostream>  
-  
-class Box {  
-    // 声明一个友元函数  
-    friend void printWi00dth(Box box);  
-  
-public:  
-    Box() : width(0.0), height(0.0) {}  
-  
-    // 成员函数，设置宽度和高度  
-    void setDimensions(double w, double h) {  
-        width = w;  
-        height = h;  
-    }  
-  
-private:  
-    double width;  
-    double height;  
-};  
-  
-// 定义一个友元函数  
-void printWidth(Box box) {  
-    // 友元函数可以直接访问Box类的私有成员  
-    std::cout << "Width of box: " << box.width << std::endl;  
-}  
-  
-int main() {  
-    Box box;  
-  
-    // 使用成员函数设置宽度和高度  
-    box.setDimensions(5.0, 10.0);  
-  
-    // 使用友元函数打印宽度  
-    printWidth(box);  
-  
-    return 0;  
+#include <iostream>
+
+class B; // 前向声明类 B
+
+class A {
+private:
+    int valueA;
+public:
+    A(int v) : valueA(v) {}
+
+    // 声明 B 为友元类
+    friend class B;
+
+    void showValueFromB(const B& b); // 声明一个方法展示 B 的私有值
+};
+
+class B {
+private:
+    int valueB;
+public:
+    B(int v) : valueB(v) {}
+
+    // 声明 A 为友元类
+    friend class A;
+
+    void showValueFromA(const A& a); // 声明一个方法展示 A 的私有值
+};
+
+void A::showValueFromB(const B& b) {
+    std::cout << "Value from class B: " << b.valueB << std::endl;
 }
-```
 
-### 4.2.2 友元类
-
-**含义**
-
-当一个类B被声明为类A的友元类时，类B的成员函数可以访问类A的所有成员，包括私有和保护成员。这是一种突破数据封装的方式，应当谨慎使用，因为它可能破坏对象的封装性和隐藏数据的原则。
-
-**用途**
-
-1. **操作符重载**：当需要重载涉及两个不同类对象的操作符时，常常将一个类声明为另一个类的友元，以便能够访问对方的私有和保护成员。
-2. **紧密协作**：在某些情况下，两个类需要非常紧密地协作，以至于一个类需要直接访问另一个类的内部状态。
-3. **避免过多的getter/setter方法**：通过友元类，可以直接访问私有成员，而不需要为每个需要访问的成员编写getter和setter方法。
-
-**示例**
-
-```
-#include <iostream>  
-  
-class Box {  
-    // 声明FriendClass为友元类  
-    friend class FriendClass;  
-  
-public:  
-    Box() : width(0.0), height(0.0) {}  
-  
-    // 普通的公有成员函数  
-    void setDimensions(double w, double h) {  
-        width = w;  
-        height = h;  
-    }  
-  
-private:  
-    double width;  
-    double height;  
-};  
-  
-class FriendClass {  
-public:  
-    void printWidth(Box& box) {  
-        // 作为友元类，可以直接访问Box的私有成员width  
-        std::cout << "Width of box: " << box.width << std::endl;  
-    }  
-};  
-  
-int main() {  
-    Box box;  
-    FriendClass friendObj;  
-  
-    // 设置Box的尺寸  
-    box.setDimensions(5.0, 10.0);  
-  
-    // 使用友元类来打印Box的宽度  
-    friendObj.printWidth(box);  
-  
-    return 0;  
+void B::showValueFromA(const A& a) {
+    std::cout << "Value from class A: " << a.valueA << std::endl;
 }
-```
 
-### 4.2.3 互为友元类
+int main() {
+    A a(10);
+    B b(20);
 
-当两个类相互声明对方为友元类时，它们被称为“互为友元”。
+    // 通过 A 类的方法展示 B 类的私有成员
+    a.showValueFromB(b);
 
-```
-#include <iostream>  
-  
-class ClassB; // 前向声明  
-  
-class ClassA {  
-    // 声明ClassB为友元类  
-    friend class ClassB;  
-  
-private:  
-    int privateDataA = 100;  
-  
-public:  
-    void showBPrivate(ClassB& b);  
-};  
-  
-class ClassB {  
-    // 声明ClassA为友元类  
-    friend class ClassA;  
-  
-private:  
-    int privateDataB = 200;  
-  
-public:  
-    void showAPrivate(ClassA& a);  
-};  
-  
-// ClassA的成员函数实现  
-void ClassA::showBPrivate(ClassB& b) {  
-    std::cout << "ClassA can access ClassB's private data: " << b.privateDataB << std::endl;  
-}  
-  
-// ClassB的成员函数实现  
-void ClassB::showAPrivate(ClassA& a) {  
-    std::cout << "ClassB can access ClassA's private data: " << a.privateDataA << std::endl;  
-}  
-  
-int main() {  
-    ClassA a;  
-    ClassB b;  
-  
-    // 互相展示私有数据  
-    a.showBPrivate(b); // ClassA can access ClassB's private data: 200  
-    b.showAPrivate(a); // ClassB can access ClassA's private data: 100  
-  
-    return 0;  
+    // 通过 B 类的方法展示 A 类的私有成员
+    b.showValueFromA(a);
+
+    return 0;
 }
 ```
 
