@@ -2581,18 +2581,24 @@ int main() {
 
 # 6.模板
 
-模板编程是一种编程范式，允许编写类型无关的代码。
+|            | 说明                                                         |
+| ---------- | ------------------------------------------------------------ |
+| 模板       | 泛型编程的一种, 允许编写类型无关的代码.                      |
+| **用途**   | **类型无关的代码**                                           |
+|            | **减少代码冗余**                                             |
+|            | **增加代码灵活性**                                           |
+|            | **编译时多态性**, 编译时根据类型生成相应代码, 并捕获类型错误. |
+|            | **优化性能**, 编译时可能会对特性类型进行优化                 |
+|            | **扩展性**, 模板可与其他特性(操作符重载/异常处理等)结合, 以创建强大易扩展的库/框架 |
+|            |                                                              |
+| 函数模板   | 通用算法: 与类型无关的通用函数                               |
+| 类模板     | 通用类: 处理不同类型, 常用于实现通用数据结构,链表/栈/队列/树等. |
+| 别名模板   | 提供了一种为模板定义新名字的方式, 用于简化模板类型名称, 增强代码可读性,c++11 |
+| 变量模板   | 根据需要生产不同的变量                                       |
+| 模板特化   | 允许为特定类型提供特化的实现.                                |
+| 模板参数包 | 模板参数包允许你定义一个可变数量的模板参数                   |
 
-**模板编程的用途**：
-
-1. **类型无关的代码**：模板允许编写不依赖于特定数据类型的代码。这意味着你可以用相同的逻辑来处理不同类型的数据，提高了代码的重用性。
-2. **减少代码冗余**：在没有模板的情况下，对于每一种数据类型，你可能需要编写几乎相同的代码。模板减少了这种冗余，使代码更加简洁。
-3. **增加代码灵活性**：模板提供了一种方式来编写更加通用的代码，这些代码可以适应多种不同的数据类型和场景。
-4. **编译时多态性**：与运行时的多态性(如虚函数)不同，模板提供了编译时的多态性。编译器在编译时根据提供的类型参数生成相应的代码，这有助于在编译期间捕获类型错误，并且通常没有运行时开销。
-5. **优化性能**：由于模板实例化是在编译时完成的，编译器有机会进行针对特定类型的优化，这可能会产生比非模板代码更高的运行效率。
-6. **扩展性**：模板可以与C++的其他特性(如操作符重载、异常处理等)结合使用，以创建强大且易于扩展的库和框架。
-
-### 4.3.1 函数模板
+##  函数模板
 
 **定义**
 
@@ -2600,47 +2606,28 @@ int main() {
 
 ```
 定义函数模板
-template <typename type> ret-type func-name(parameter list)
+template <typename type> return-type func-name(parameter list)
 {
    // 函数的主体
 }
 ```
 
 ```
-#include <iostream>  
-  
-// 函数模板声明  
-template <typename T>  
-void swap(T& a, T& b) {  
-    T temp = a;  
-    a = b;  
-    b = temp;  
-}  
-  
-int main() {  
-    int x = 5, y = 10;  
-    std::cout << "Before swap: x = " << x << ", y = " << y << std::endl;  
-  
-    // 实例化函数模板，用于int类型  
-    swap(x, y);  
-    std::cout << "After swap: x = " << x << ", y = " << y << std::endl;  
-  
-    double p = 3.14, q = 2.71;  
-    std::cout << "Before swap: p = " << p << ", q = " << q << std::endl;  
-  
-    // 实例化函数模板，用于double类型  
-    swap(p, q);  
-    std::cout << "After swap: p = " << p << ", q = " << q << std::endl;  
-  
-    return 0;  
+#include <iostream>
+
+template <typename T>
+T add(T a, T b) {
+    return a + b;
+}
+
+int main() {
+    std::cout << add(5, 10) << std::endl;        // 整数相加
+    std::cout << add(5.5, 10.5) << std::endl;    // 浮点数相加
+    return 0;
 }
 ```
 
-### 4.3.2 类模板
-
-模板类(也称为类模板)是一种特殊的类，它可以被参数化以工作在多种不同的数据类型上。
-
-定义模型
+## 类模板
 
 ```
 template <typename type>
@@ -2654,63 +2641,137 @@ class class-name {
 代码示例：
 
 ```
-#include <iostream>  
-  
-// 声明模板类  
-template <typename T>  
-class Array {  
-private:  
-    T* data;  
-    int size;  
-  
-public:  
-    // 构造函数  
-    Array(int size) {  
-        this->size = size;  
-        data = new T[size];  
-    }  
-  
-    // 析构函数  
-    ~Array() {  
-        delete[] data;  
-    }  
-  
-    // 设置元素  
-    void set(int index, T value) {  
-        if (index >= 0 && index < size) {  
-            data[index] = value;  
-        }  
-    }  
-  
-    // 获取元素  
-    T get(int index) {  
-        if (index >= 0 && index < size) {  
-            return data[index];  
-        }  
-        // 抛出异常或返回一个默认值可能是更好的做法  
-        return T();  
-    }  
-  
-    // 获取数组大小  
-    int getSize() const {  
-        return size;  
-    }  
-};  
-  
-int main() {  
-    // 实例化模板类用于int类型  
-    Array<int> intArray(5);  
-    intArray.set(0, 10);  
-    std::cout << "intArray[0] = " << intArray.get(0) << std::endl;  
-  
-    // 实例化模板类用于double类型  
-    Array<double> doubleArray(3);  
-    doubleArray.set(0, 3.14);  
-    std::cout << "doubleArray[0] = " << doubleArray.get(0) << std::endl;  
-  
-    return 0;  
+#include <iostream>
+
+template <typename T>
+class Stack {
+private:
+    T* arr;
+    int size;
+    int top;
+public:
+    Stack(int size) : size(size), top(-1) {
+        arr = new T[size];
+    }
+    ~Stack() {
+        delete[] arr;
+    }
+    void push(T value) {
+        if (top < size - 1) {
+            arr[++top] = value;
+        }
+    }
+    T pop() {
+        if (top >= 0) {
+            return arr[top--];
+        }
+        return T(); // 返回默认值
+    }
+};
+
+int main() {
+    Stack<int> intStack(10);
+    intStack.push(1);
+    intStack.push(2);
+    std::cout << intStack.pop() << std::endl;
+
+    Stack<double> doubleStack(10);
+    doubleStack.push(1.1);
+    doubleStack.push(2.2);
+    std::cout << doubleStack.pop() << std::endl;
+
+    return 0;
 }
 ```
+
+## 别名模板
+
+```
+#include <iostream>
+#include <vector>
+#include <string>
+
+template <typename T>
+using Vec = std::vector<T>;
+
+int main() {
+    Vec<int> intVec = {1, 2, 3};
+    Vec<std::string> stringVec = {"hello", "world"};
+
+    for (int val : intVec) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    for (const auto& str : stringVec) {
+        std::cout << str << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+
+## 变量模板
+
+```
+#include <iostream>
+
+template <typename T>
+constexpr T pi = T(3.1415926535897932385);
+
+int main() {
+    std::cout << pi<float> << std::endl;  // 输出单精度 PI
+    std::cout << pi<double> << std::endl; // 输出双精度 PI
+    return 0;
+}
+```
+
+## 模板特化
+
+```
+#include <iostream>
+
+// 通用模板
+template <typename T>
+class TypeTraits {
+public:
+    static void printType() {
+        std::cout << "Unknown type" << std::endl;
+    }
+};
+
+// 特化模板
+template <>
+class TypeTraits<int> {
+public:
+    static void printType() {
+        std::cout << "int" << std::endl;
+    }
+};
+
+template <>
+class TypeTraits<double> {
+public:
+    static void printType() {
+        std::cout << "double" << std::endl;
+    }
+};
+
+int main() {
+    TypeTraits<int>::printType();    // 输出 int
+    TypeTraits<double>::printType(); // 输出 double
+    TypeTraits<char>::printType();   // 输出 Unknown type
+
+    return 0;
+}
+```
+
+
+
+
+
+
 
 # 5 异常处理
 
